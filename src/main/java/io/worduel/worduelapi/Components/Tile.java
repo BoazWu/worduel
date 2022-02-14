@@ -2,6 +2,7 @@ package io.worduel.worduelapi.Components;
 
 import com.vaadin.flow.component.textfield.TextField;
 
+
 public class Tile extends TextField{
 	private char letter;
 	private boolean letterVisible;
@@ -15,6 +16,10 @@ public class Tile extends TextField{
 		this.sideLength = sideLength;
 		this.letterVisible = letterVisible;
 		color = "white";
+		this.setMaxlength(1);
+		this.setPattern("^[a-zA-Z]$");
+		this.setPreventInvalidInput(true);
+
 	}
 	
 	public void setColor(String color){
