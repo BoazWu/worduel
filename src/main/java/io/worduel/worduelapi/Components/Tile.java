@@ -1,6 +1,8 @@
 package io.worduel.worduelapi.Components;
 
-public class Tile {
+import com.vaadin.flow.component.textfield.TextField;
+
+public class Tile extends TextField{
 	private char letter;
 	private boolean letterVisible;
 	private String color;
@@ -15,15 +17,15 @@ public class Tile {
 		color = "white";
 	}
 	
-	private void setColor(String color){
+	public void setColor(String color){
 		this.color = color;
 	}
 	
-	private void setLetter(char letter) {
+	public void setLetter(char letter) {
 		this.letter = letter;
 	}
 	
-	private void setVisibility(boolean letterVisible) {
+	public void setVisibility(boolean letterVisible) {
 		this.letterVisible = letterVisible;
 	}
 }
