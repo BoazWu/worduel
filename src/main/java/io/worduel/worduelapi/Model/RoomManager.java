@@ -6,24 +6,39 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class RoomManager {
-	private HashMap<String, Room> roomMap;
+	private final int ROOM_CODE_LENGTH = 5;
+	
+	private HashMap<String, Room> rooms;
 	
 	public RoomManager() {
-		roomMap = new HashMap<String, Room>();
+		rooms = new HashMap<String, Room>();
 	}
 	
-	public void addRoom(String roomCode, Room room) {
-		roomMap.put(roomCode, room);
+	public String addRoom() {
+		String roomCode = generateRoomCode();
+		rooms.put(roomCode, new Room(roomCode));
+		return roomCode;
 	}
 	public void removeRoom(String roomCode) {
-		roomMap.remove(roomCode);
+		rooms.remove(roomCode);
 	}
 	
 	public boolean containsRoom(String roomCode) {
-		return roomMap.containsKey(roomCode);
+		return rooms.containsKey(roomCode);
 	}
 	public Room getRoom(String roomCode) {
-		return roomMap.get(roomCode);
+		return rooms.get(roomCode);
 	}
 	
+	//Helper method to randomly generate a Room Code
+		private String generateRoomCode() {
+			String roomCode;
+			do{
+				roomCode = "";
+				for(int letter = 0; letter < ROOM_CODE_LENGTH; letter++) {
+					roomCode += (char) (97 + 26 * Math.random());
+				}
+			}while(rooms.containsKey(roomCode));
+			return roomCode;
+		}
 }
