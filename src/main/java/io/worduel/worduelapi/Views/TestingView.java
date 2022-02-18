@@ -27,17 +27,24 @@ public class TestingView extends VerticalLayout{
 	
 	public TestingView() {
     TextField roomCodeField = new TextField(); 
-    Button makeRoomButton = new Button(new RouterLink("Make Room", RoomView.class, new RouteParameters("roomCode", roomCodeField.getValue()))); 
+    Button makeRoomButton = new Button("Make Room"); 
     makeRoomButton.addClickListener(click -> { 
-    	roomManager.addRoom(roomCodeField.getValue(), new Room(roomCodeField.getValue()));
-    	//go to page
+    	String roomCode = roomManager.addRoom();
+    	makeRoomButton.getUI().ifPresent(ui -> ui.navigate(RoomView.class, new RouteParameters("roomCode", roomCode)));
+    });
+    Button joinRoomButton = new Button("Join Room"); 
+    joinRoomButton.addClickListener(click -> { 
+    	joinRoomButton.getUI().ifPresent(ui -> ui.navigate(RoomView.class, new RouteParameters("roomCode", roomCodeField.getValue())));
     });
 
     add( 
       new H1("Worduel"),
       new HorizontalLayout(
-        roomCodeField,
-        makeRoomButton
+    	makeRoomButton
+      ),
+      new HorizontalLayout(
+    	roomCodeField,        
+    	joinRoomButton
       )
     );
 	}
