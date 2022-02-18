@@ -1,4 +1,4 @@
-package io.worduel.worduelapi.Pages;
+package io.worduel.worduelapi.Views;
 
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
@@ -10,9 +10,9 @@ import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.Route;
 
 @Route("")
-public class HomePage extends VerticalLayout {
+public class HomeView extends VerticalLayout {
 
-	public HomePage() {
+	public HomeView() {
 		VerticalLayout todosList = new VerticalLayout();
 		TextField taskField = new TextField();
 		Button addButton = new Button("Add");
