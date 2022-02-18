@@ -24,10 +24,14 @@ public class GamePage extends VerticalLayout {
 	public GamePage() {
 		
 		VerticalLayout gameField = new VerticalLayout();
-		gameField.setAlignItems(FlexComponent.Alignment.CENTER);
-		gameField.add(new H1("Game"));
 		
-		gameField.add(createGameTile());
+		gameField.setAlignItems(FlexComponent.Alignment.CENTER);
+		
+		gameField.add(new H1("Game"));
+				
+		gameField.add((new GameRow(letterCount)).getGameRow());
+		
+		/*
 		TextField taskField = new TextField();
 		Button addButton = new Button("Submit");
 		addButton.addClickListener(click -> {
@@ -36,11 +40,11 @@ public class GamePage extends VerticalLayout {
 			taskField.clear();
 		});
 		addButton.addClickShortcut(Key.ENTER);
-
+		
 		add(gameField, new HorizontalLayout(taskField, addButton));
+		*/
+		add(gameField);
 	}
 	
-	public GameTile createGameTile() {
-		return new GameTile();	
-	}
+	
 }
