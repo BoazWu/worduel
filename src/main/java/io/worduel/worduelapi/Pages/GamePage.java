@@ -14,10 +14,10 @@ import com.vaadin.flow.component.textfield.TextField;
 import io.worduel.worduelapi.Components.*;
 
 import com.vaadin.flow.router.Route;
-
-@CssImport("themes/tiletheme/tile.css")
+import com.vaadin.flow.theme.Theme;
 
 @Route("game")
+@Theme(themeFolder = "mytheme")
 public class GamePage extends VerticalLayout {
 	
 	private int letterCount = 5;
