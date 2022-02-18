@@ -1,4 +1,4 @@
-package io.worduel.worduelapi.Pages;
+package io.worduel.worduelapi.Views;
 
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
@@ -18,10 +18,10 @@ import com.vaadin.flow.theme.Theme;
 
 @Route("game")
 @Theme(themeFolder = "mytheme")
-public class GamePage extends VerticalLayout {
+public class GameView extends VerticalLayout {
 	
 	private int letterCount = 5;
-	public GamePage() {
+	public GameView() {
 		
 		VerticalLayout gameField = new VerticalLayout();
 		
