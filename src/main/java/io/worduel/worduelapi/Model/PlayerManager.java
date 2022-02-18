@@ -21,6 +21,19 @@ public class PlayerManager {
 		return onlinePlayerCount;
 	}
 	
+	public String getPlayerName(String playerID) {
+		return players.get(playerID).getName();
+	}
+	public boolean getPlayerReadyStatus(String playerID) {
+		return players.get(playerID).getReadyStatus();
+	}
+	public void setPlayerReadyStatus(String playerID, boolean readyStatus) {
+		players.get(playerID).setReadyStatus(readyStatus);
+	}
+	public void setPlayerName(String playerID, String name) {
+		players.get(playerID).setName(name);
+		
+	}
 	public String addPlayer() {
 		String id = generateID();
 		players.put(id, new Player(id));
@@ -46,4 +59,6 @@ public class PlayerManager {
 		}while(players.containsKey(id));
 		return id;
 	}
+
+	
 }
