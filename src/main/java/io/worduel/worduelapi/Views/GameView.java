@@ -29,7 +29,7 @@ public class GameView extends VerticalLayout {
 		
 		gameField.add(new H1("Game"));
 				
-		gameField.add((new GameRow(letterCount)).getGameRow());
+		gameField.add(new GameRow(letterCount));
 		
 		/*
 		TextField taskField = new TextField();
