@@ -2,8 +2,6 @@ package io.worduel.worduelapi.Views;
 
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
-import com.vaadin.flow.component.page.Push;
-import com.vaadin.flow.router.Route;
 import com.vaadin.flow.shared.Registration;
 
 import io.worduel.worduelapi.Model.GameManager;

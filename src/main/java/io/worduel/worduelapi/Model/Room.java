@@ -2,24 +2,12 @@ package io.worduel.worduelapi.Model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.concurrent.Executor;
-import java.util.concurrent.Executors;
-import java.util.function.Consumer;
 
-import com.vaadin.flow.component.Component;
-import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.shared.Registration;
-
-import io.worduel.Actions.Action;
 import io.worduel.Actions.LobbyAction;
 import io.worduel.Actions.LobbyActionTypes;
-import io.worduel.Components.NameComponent;
 import io.worduel.worduelapi.Networking.LobbyBroadcaster;
 
 public class Room {
-	private Executor executor = Executors.newSingleThreadExecutor();
-	
 	private String roomCode;
 	private ArrayList<String> playersInRoom;
 	private int playerCount;
@@ -80,5 +68,8 @@ public class Room {
 	}
 	public LobbyBroadcaster getLobbyBroadcaster() {
 		return this.lobbyBroadcaster;
+	}
+	public String getRoomCode() {
+		return this.roomCode;
 	}
 }
