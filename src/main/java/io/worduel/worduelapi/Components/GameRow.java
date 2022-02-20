@@ -9,6 +9,7 @@ public class GameRow extends HorizontalLayout{
 		gameTiles = new GameTile[length];
 		for(int i = 0; i < length; i++) {
 			GameTile temp = new GameTile();
+			//temp.setClassName("GameTile");
 			gameTiles[i] = temp;
 			this.add(temp);
 			

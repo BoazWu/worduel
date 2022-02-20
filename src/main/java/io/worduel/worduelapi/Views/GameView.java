@@ -17,7 +17,8 @@ import com.vaadin.flow.router.Route;
 import com.vaadin.flow.theme.Theme;
 
 @Route("game")
-@Theme(themeFolder = "mytheme")
+//@Theme(themeFolder = "mytheme")
+@CssImport("./themes/mytheme/styles.css")
 public class GameView extends VerticalLayout {
 	
 	private int letterCount = 5;
