@@ -39,7 +39,7 @@ public class LobbyView extends Div{
 			event.getUI().access(() -> playersInRoom.add(nameComponent));
 			nameComponents.put(otherPlayerID, nameComponent);
 		}
-		lobbyBroadcasterRegistration = gameManager.getRoom(roomCode).register(playerID, action -> {
+		lobbyBroadcasterRegistration = gameManager.getRoom(roomCode).getLobbyBroadcaster().register(playerID, action -> {
 			NameComponent nameComponent;
 			switch(action.getActionID()) {
 				case "CONNECT":
@@ -74,7 +74,7 @@ public class LobbyView extends Div{
 	    updateNameButton.addClickListener(click -> { 
 	    	if(nameTextField.getValue() != "") {
 	    		gameManager.setPlayerName(playerID, nameTextField.getValue());
-	    		gameManager.getRoom(roomCode).broadcast(new LobbyAction(playerID, LobbyActionTypes.UPDATE_NAME));
+	    		gameManager.getRoom(roomCode).getLobbyBroadcaster().broadcast(new LobbyAction(playerID, LobbyActionTypes.UPDATE_NAME));
 	    		nameTextField.setValue("");
 	    	}
 	    });
@@ -85,12 +85,12 @@ public class LobbyView extends Div{
 	      if(gameManager.getRoom(roomCode).getReadyStatus(playerID)) {
 	    	  gameManager.getRoom(roomCode).setReadyStatus(playerID, false);
 	    	  readyUpButton.setText("Ready Up");
-	    	  gameManager.getRoom(roomCode).broadcast(new LobbyAction(playerID, LobbyActionTypes.UNREADY));
+	    	  gameManager.getRoom(roomCode).getLobbyBroadcaster().broadcast(new LobbyAction(playerID, LobbyActionTypes.UNREADY));
 	    	  
 	      }else {
 	    	  gameManager.getRoom(roomCode).setReadyStatus(playerID, true);
 	    	  readyUpButton.setText("Unready");
-	    	  gameManager.getRoom(roomCode).broadcast(new LobbyAction(playerID, LobbyActionTypes.READY_UP));
+	    	  gameManager.getRoom(roomCode).getLobbyBroadcaster().broadcast(new LobbyAction(playerID, LobbyActionTypes.READY_UP));
 	      }
 	    });
 	    

@@ -57,7 +57,7 @@ public class RoomView extends Div implements BeforeEnterObserver, BeforeLeaveObs
 			
 			lobbyView = new LobbyView(roomCode, playerID, gameManager, event);
 			
-			gameManager.getRoom(roomCode).broadcast(new LobbyAction(playerID, LobbyActionTypes.CONNECT));
+			gameManager.getRoom(roomCode).getLobbyBroadcaster().broadcast(new LobbyAction(playerID, LobbyActionTypes.CONNECT));
 			
 			add(lobbyView);
 		}

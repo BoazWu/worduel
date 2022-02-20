@@ -15,6 +15,7 @@ import io.worduel.Actions.Action;
 import io.worduel.Actions.LobbyAction;
 import io.worduel.Actions.LobbyActionTypes;
 import io.worduel.Components.NameComponent;
+import io.worduel.worduelapi.Networking.LobbyBroadcaster;
 
 public class Room {
 	private Executor executor = Executors.newSingleThreadExecutor();
@@ -22,11 +23,11 @@ public class Room {
 	private String roomCode;
 	private ArrayList<String> playersInRoom;
 	private int playerCount;
-
-    private LinkedList<Consumer<Action>> playerList = new LinkedList<>();
     
     private HashMap<String, Boolean> playerReadyStatus;
     private int playerReadyCount;
+    
+    private LobbyBroadcaster lobbyBroadcaster;
     
     public Room(String roomCode) {
     	this.roomCode = roomCode;
@@ -34,33 +35,26 @@ public class Room {
     	this.playerReadyStatus = new HashMap<String, Boolean>();
     	this.playerReadyCount = 0;
     	this.playerCount = 0;
+    	
+    	lobbyBroadcaster = new LobbyBroadcaster(this);
     }
     
-    public synchronized Registration register(String playerID, Consumer<Action> player) {
+    
+    public void addPlayer(String playerID) {
     	playerCount++;
-    	playerList.add(player);
         playersInRoom.add(playerID);
         playerReadyStatus.put(playerID, false);
-        
-        return () -> {
-            synchronized (Room.class) {
-            	broadcast(new LobbyAction(playerID, LobbyActionTypes.DISCONNECT));
-            	playerCount--;
-                playerList.remove(player);
-                playersInRoom.remove(playerID);
-                if(playerReadyStatus.get(playerID)) {
-                	playerReadyCount--;
-                }
-                playerReadyStatus.remove(playerID);
-            }
-        };
     }
-
-    public synchronized void broadcast(Action action) {
-        for (Consumer<Action> player : playerList) {
-            executor.execute(() -> player.accept(action));
+    
+    public void removePlayer(String playerID) {
+    	playerCount--;
+        playersInRoom.remove(playerID);
+        if(playerReadyStatus.get(playerID)) {
+        	playerReadyCount--;
         }
+        playerReadyStatus.remove(playerID);
     }
+    
     public ArrayList<String> getPlayersInRoom(){
     	return playersInRoom;
     }
@@ -70,7 +64,7 @@ public class Room {
 			if(readyStatus) {
 				playerReadyCount++;
 				if(playerCount >= 2 && playerReadyCount == playerCount) {
-					broadcast(new LobbyAction("", LobbyActionTypes.START_GAME));
+					this.lobbyBroadcaster.broadcast(new LobbyAction("", LobbyActionTypes.START_GAME));
 					playerReadyCount = 0;
 					for(boolean b : playerReadyStatus.values()) {
 						b = false;
@@ -83,5 +77,8 @@ public class Room {
 	}
 	public boolean getReadyStatus(String playerID) {
 		return playerReadyStatus.get(playerID);
+	}
+	public LobbyBroadcaster getLobbyBroadcaster() {
+		return this.lobbyBroadcaster;
 	}
 }
