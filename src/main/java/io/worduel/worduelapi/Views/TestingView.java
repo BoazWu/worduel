@@ -16,14 +16,14 @@ import com.vaadin.flow.router.RouteParameters;
 import com.vaadin.flow.router.RouterLink;
 
 import io.worduel.worduelapi.Model.Room;
-import io.worduel.worduelapi.Model.RoomManager;
+import io.worduel.worduelapi.Model.GameManager;
 
 @Push
 @Route("/testing")
 public class TestingView extends VerticalLayout{
 	
 	@Autowired
-	RoomManager roomManager;
+	GameManager roomManager;
 	
 	public TestingView() {
     TextField roomCodeField = new TextField(); 

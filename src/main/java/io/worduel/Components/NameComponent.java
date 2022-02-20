@@ -6,12 +6,12 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 public class NameComponent extends HorizontalLayout{
 	private H4 readyStatus;
 	private H4 name;
-	public NameComponent(String name) {
-		readyStatus = new H4("Not Ready");
+	public NameComponent(String name, boolean readyStatus) {
+		this.readyStatus = new H4(readyStatus ? "Ready" : "Not Ready");
 		this.name = new H4(name);
 		add(
 		this.name,
-		readyStatus
+		this.readyStatus
 		);
 	}
 	public void setReadyStatus(boolean readyStatus) {

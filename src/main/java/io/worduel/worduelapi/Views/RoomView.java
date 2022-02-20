@@ -26,8 +26,7 @@ import com.vaadin.flow.shared.Registration;
 import io.worduel.Actions.RoomAction;
 import io.worduel.Actions.RoomActionTypes;
 import io.worduel.Components.NameComponent;
-import io.worduel.worduelapi.Model.PlayerManager;
-import io.worduel.worduelapi.Model.RoomManager;
+import io.worduel.worduelapi.Model.GameManager;
 
 @Push
 @Route("/room/:roomCode")
@@ -40,10 +39,7 @@ public class RoomView extends Div implements BeforeEnterObserver, BeforeLeaveObs
 	private Registration roomBroadcasterRegistration;
 	
 	@Autowired
-	RoomManager roomManager;
-	
-	@Autowired
-	PlayerManager playerManager;
+	GameManager gameManager;
 	
 
 	public RoomView() {
@@ -53,22 +49,22 @@ public class RoomView extends Div implements BeforeEnterObserver, BeforeLeaveObs
 	@Override
 	public void beforeEnter(BeforeEnterEvent event) {
 		roomCode = event.getRouteParameters().get("roomCode").get();
-		if(!roomManager.containsRoom(roomCode)) {
+		if(!gameManager.containsRoom(roomCode)) {
 			event.forwardTo(RoomNotFoundView.class);
 		}else {
-			playerID = playerManager.addPlayer();
+			playerID = gameManager.addPlayer();
 			nameComponents = new HashMap<String, NameComponent>();
 			playersInRoom = new VerticalLayout();
-			for(String playerID : roomManager.getRoom(roomCode).getPlayersInRoom()) {
-				NameComponent nameComponent = new NameComponent(playerManager.getPlayerName(playerID));
+			for(String playerID : gameManager.getRoom(roomCode).getPlayersInRoom()) {
+				NameComponent nameComponent = new NameComponent(gameManager.getPlayerName(playerID), gameManager.getRoom(roomCode).getReadyStatus(playerID));
 				event.getUI().access(() -> playersInRoom.add(nameComponent));
 				nameComponents.put(playerID, nameComponent);
 			}
-			roomBroadcasterRegistration = roomManager.getRoom(roomCode).register(playerID, action -> {
+			roomBroadcasterRegistration = gameManager.getRoom(roomCode).register(playerID, action -> {
 				NameComponent nameComponent;
 				switch(action.getActionID()) {
 					case "CONNECT":
-						nameComponent = new NameComponent(playerManager.getPlayerName(action.getSender()));
+						nameComponent = new NameComponent(gameManager.getPlayerName(action.getSender()), false);
 			            event.getUI().access(() -> playersInRoom.add(nameComponent));
 			            nameComponents.put(action.getSender(), nameComponent);
 						break;
@@ -79,7 +75,7 @@ public class RoomView extends Div implements BeforeEnterObserver, BeforeLeaveObs
 						break;
 					case "UPDATE_NAME":
 						nameComponent = nameComponents.get(action.getSender());
-						event.getUI().access(()-> nameComponent.setName(playerManager.getPlayerName(action.getSender())));
+						event.getUI().access(()-> nameComponent.setName(gameManager.getPlayerName(action.getSender())));
 						break;
 					case "READY_UP":
 						nameComponent = nameComponents.get(action.getSender());
@@ -92,14 +88,14 @@ public class RoomView extends Div implements BeforeEnterObserver, BeforeLeaveObs
 				}
 	        });
 			
-			roomManager.getRoom(roomCode).broadcast(new RoomAction(playerID, RoomActionTypes.CONNECT));
+			gameManager.getRoom(roomCode).broadcast(new RoomAction(playerID, RoomActionTypes.CONNECT));
 			
 			TextField nameTextField = new TextField(); 
 		    Button updateNameButton = new Button("Update Name"); 
 		    updateNameButton.addClickListener(click -> { 
 		    	if(nameTextField.getValue() != "") {
-		    		playerManager.setPlayerName(playerID, nameTextField.getValue());
-		    		roomManager.getRoom(roomCode).broadcast(new RoomAction(playerID, RoomActionTypes.UPDATE_NAME));
+		    		gameManager.setPlayerName(playerID, nameTextField.getValue());
+		    		gameManager.getRoom(roomCode).broadcast(new RoomAction(playerID, RoomActionTypes.UPDATE_NAME));
 		    		nameTextField.setValue("");
 		    	}
 		    });
@@ -107,15 +103,15 @@ public class RoomView extends Div implements BeforeEnterObserver, BeforeLeaveObs
 			
 			Button readyUpButton = new Button("Ready Up"); 
 		    readyUpButton.addClickListener(click -> { 
-		      if(playerManager.getPlayerReadyStatus(playerID)) {
-		    	  playerManager.setPlayerReadyStatus(playerID, false);
+		      if(gameManager.getRoom(roomCode).getReadyStatus(playerID)) {
+		    	  gameManager.getRoom(roomCode).setReadyStatus(playerID, false);
 		    	  readyUpButton.setText("Ready Up");
-		    	  roomManager.getRoom(roomCode).broadcast(new RoomAction(playerID, RoomActionTypes.UNREADY));
+		    	  gameManager.getRoom(roomCode).broadcast(new RoomAction(playerID, RoomActionTypes.UNREADY));
 		    	  
 		      }else {
-		    	  playerManager.setPlayerReadyStatus(playerID, true);
+		    	  gameManager.getRoom(roomCode).setReadyStatus(playerID, true);
 		    	  readyUpButton.setText("Unready");
-		    	  roomManager.getRoom(roomCode).broadcast(new RoomAction(playerID, RoomActionTypes.READY_UP));
+		    	  gameManager.getRoom(roomCode).broadcast(new RoomAction(playerID, RoomActionTypes.READY_UP));
 		      }
 		    });
 		    
@@ -145,6 +141,6 @@ public class RoomView extends Div implements BeforeEnterObserver, BeforeLeaveObs
 	private void exit() {
 		roomBroadcasterRegistration.remove();
 		roomBroadcasterRegistration = null;
-		playerManager.removePlayer(playerID);
+		gameManager.removePlayer(playerID);
 	}
 }
