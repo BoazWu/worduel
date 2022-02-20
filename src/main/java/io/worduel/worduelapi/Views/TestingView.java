@@ -19,7 +19,7 @@ import io.worduel.worduelapi.Model.Room;
 import io.worduel.worduelapi.Model.GameManager;
 
 @Push
-@Route("/testing")
+@Route("")
 public class TestingView extends VerticalLayout{
 	
 	@Autowired

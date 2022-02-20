@@ -30,7 +30,7 @@ import io.worduel.Components.NameComponent;
 import io.worduel.worduelapi.Model.GameManager;
 
 @Push
-@Route("/room/:roomCode")
+@Route("/:roomCode")
 public class RoomView extends Div implements BeforeEnterObserver, BeforeLeaveObserver {
 	private String roomCode;
 	private String playerID;
