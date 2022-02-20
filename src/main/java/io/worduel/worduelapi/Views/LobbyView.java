@@ -2,6 +2,7 @@ package io.worduel.worduelapi.Views;
 
 import java.util.HashMap;
 
+import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
@@ -17,6 +18,8 @@ import io.worduel.Components.NameComponent;
 import io.worduel.worduelapi.Model.GameManager;
 
 public class LobbyView extends Div{
+	
+	private RoomView roomView;
 
 	private String roomCode;
 	private String playerID;
@@ -27,7 +30,9 @@ public class LobbyView extends Div{
 	private VerticalLayout playersInRoom;
 	private HashMap<String, NameComponent> nameComponents;
 	
-	public LobbyView(String roomCode, String playerID, GameManager gameManager, BeforeEnterEvent event) {
+	public LobbyView(RoomView roomView, String roomCode, String playerID, GameManager gameManager, BeforeEnterEvent event) {
+		this.roomView = roomView;
+		
 		this.roomCode = roomCode;
 		this.playerID = playerID;
 		this.gameManager = gameManager;
@@ -65,6 +70,7 @@ public class LobbyView extends Div{
 					event.getUI().access(()-> nameComponent.setReadyStatus(false));
 					break;
 				case "START_GAME":
+					roomView.startGame();
 					break;
 			}
         });
@@ -105,5 +111,14 @@ public class LobbyView extends Div{
 			readyUpButton,
 			playersInRoom
 		);
+	}
+	@Override
+    protected void onDetach(DetachEvent detachEvent) {
+		//exit();
+    }
+	private void exit() {
+		lobbyBroadcasterRegistration.remove();
+		lobbyBroadcasterRegistration = null;
+		gameManager.removePlayer(playerID);
 	}
 }

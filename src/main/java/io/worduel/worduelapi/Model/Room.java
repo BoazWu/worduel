@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import io.worduel.Actions.LobbyAction;
 import io.worduel.Actions.LobbyActionTypes;
+import io.worduel.worduelapi.Networking.GameBroadcaster;
 import io.worduel.worduelapi.Networking.LobbyBroadcaster;
 
 public class Room {
@@ -16,6 +17,9 @@ public class Room {
     private int playerReadyCount;
     
     private LobbyBroadcaster lobbyBroadcaster;
+    private GameBroadcaster gameBroadcaster;
+    
+    private Game game;
     
     public Room(String roomCode) {
     	this.roomCode = roomCode;
@@ -52,6 +56,8 @@ public class Room {
 			if(readyStatus) {
 				playerReadyCount++;
 				if(playerCount >= 2 && playerReadyCount == playerCount) {
+					gameBroadcaster = new GameBroadcaster(this);
+					game = new Game(this, 5, playersInRoom);
 					this.lobbyBroadcaster.broadcast(new LobbyAction("", LobbyActionTypes.START_GAME));
 					playerReadyCount = 0;
 					for(boolean b : playerReadyStatus.values()) {
@@ -69,7 +75,13 @@ public class Room {
 	public LobbyBroadcaster getLobbyBroadcaster() {
 		return this.lobbyBroadcaster;
 	}
+	public GameBroadcaster getGameBroadcaster() {
+		return this.gameBroadcaster;
+	}
 	public String getRoomCode() {
 		return this.roomCode;
+	}
+	public Game getGame() {
+		return this.game;
 	}
 }

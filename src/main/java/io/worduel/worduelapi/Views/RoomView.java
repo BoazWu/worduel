@@ -18,17 +18,16 @@ import io.worduel.worduelapi.Model.GameManager;
 
 @Push
 @Route("/:roomCode")
-public class RoomView extends Div implements BeforeEnterObserver, BeforeLeaveObserver {
+public class RoomView extends Div implements BeforeEnterObserver {
 	private String roomCode;
 	private String playerID;
 	
-	
-	private Registration roomBroadcasterRegistration;
-	
 	@Autowired
-	GameManager gameManager;
+	private GameManager gameManager;
 	
-	LobbyView lobbyView;
+	private LobbyView lobbyView;
+	private GameView gameView;
+	private InterimScoresView interimScoresView;
 
 	public RoomView() {
 		
@@ -42,7 +41,7 @@ public class RoomView extends Div implements BeforeEnterObserver, BeforeLeaveObs
 		}else {
 			playerID = gameManager.addPlayer();
 			
-			lobbyView = new LobbyView(roomCode, playerID, gameManager, event);
+			lobbyView = new LobbyView(this, roomCode, playerID, gameManager, event);
 			
 			gameManager.getRoom(roomCode).getLobbyBroadcaster().broadcast(new LobbyAction(playerID, LobbyActionTypes.CONNECT));
 			
@@ -50,19 +49,19 @@ public class RoomView extends Div implements BeforeEnterObserver, BeforeLeaveObs
 		}
 	}
 
-	@Override
-	public void beforeLeave(BeforeLeaveEvent event) {
-		exit();
-		
+	public void startGame() {
+		gameView = new GameView(this, roomCode, playerID, gameManager);
+		this.getUI().get().access(() -> {
+			remove(lobbyView);
+			add(gameView);
+		});
 	}
-	@Override
-    protected void onDetach(DetachEvent detachEvent) {
-		exit();
-    }
-
-	private void exit() {
-		roomBroadcasterRegistration.remove();
-		roomBroadcasterRegistration = null;
-		gameManager.removePlayer(playerID);
+	public void roundOver() {
+		//Check if this is the last round, if it is, show finalScoresView
+		interimScoresView = new InterimScoresView(this.roomCode);
+		this.getUI().get().access(() -> {
+			remove(gameView);
+			add(interimScoresView);
+		});
 	}
 }
