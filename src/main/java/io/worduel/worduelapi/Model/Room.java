@@ -12,10 +12,9 @@ import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.shared.Registration;
 
 import io.worduel.Actions.Action;
-import io.worduel.Actions.RoomAction;
-import io.worduel.Actions.RoomActionTypes;
+import io.worduel.Actions.LobbyAction;
+import io.worduel.Actions.LobbyActionTypes;
 import io.worduel.Components.NameComponent;
-import io.worduel.worduelapi.Networking.Broadcaster;
 
 public class Room {
 	private Executor executor = Executors.newSingleThreadExecutor();
@@ -25,14 +24,12 @@ public class Room {
 	private int playerCount;
 
     private LinkedList<Consumer<Action>> playerList = new LinkedList<>();
-    private HashMap<String, NameComponent> nameComponents;
     
     private HashMap<String, Boolean> playerReadyStatus;
     private int playerReadyCount;
     
     public Room(String roomCode) {
     	this.roomCode = roomCode;
-    	this.nameComponents = new HashMap<String, NameComponent>();
     	this.playersInRoom = new ArrayList<String>();
     	this.playerReadyStatus = new HashMap<String, Boolean>();
     	this.playerReadyCount = 0;
@@ -46,8 +43,8 @@ public class Room {
         playerReadyStatus.put(playerID, false);
         
         return () -> {
-            synchronized (Broadcaster.class) {
-            	broadcast(new RoomAction(playerID, RoomActionTypes.DISCONNECT));
+            synchronized (Room.class) {
+            	broadcast(new LobbyAction(playerID, LobbyActionTypes.DISCONNECT));
             	playerCount--;
                 playerList.remove(player);
                 playersInRoom.remove(playerID);
@@ -73,8 +70,11 @@ public class Room {
 			if(readyStatus) {
 				playerReadyCount++;
 				if(playerCount >= 2 && playerReadyCount == playerCount) {
-					//Start the game
-					System.out.println("Start the game");
+					broadcast(new LobbyAction("", LobbyActionTypes.START_GAME));
+					playerReadyCount = 0;
+					for(boolean b : playerReadyStatus.values()) {
+						b = false;
+					}
 				}
 			}else {
 				playerReadyCount--;
