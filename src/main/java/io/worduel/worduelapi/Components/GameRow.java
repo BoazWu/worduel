@@ -62,8 +62,10 @@ public class GameRow extends HorizontalLayout{
 		}
 		// if there is space to edit 
 		else if(index < length) {
+			
+			int temp = index;
+			ui.access(() -> gameTiles[temp].setText(letter));
 			index++;
-			ui.access(() -> gameTiles[index - 1].setText(letter));
 			
 		} else {
 			// tell user too many letters
