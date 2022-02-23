@@ -9,6 +9,7 @@ import com.vaadin.flow.component.dependency.CssImport;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.html.H4;
+import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.icon.Icon;
 import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
@@ -43,8 +44,8 @@ public class GameView extends Div{
 		this.roomCode = roomCode;
 		this.playerID = playerID;
 		this.gameManager = gameManager;
+		this.setClassName("GameView");
 		gameRound = gameManager.getRoom(roomCode).getGame();
-		
 		gameBroadcasterRegistration = gameManager.getRoom(roomCode).getGameBroadcaster().register(this.playerID, action -> {
 			NameComponent nameComponent;
 			switch(action.getActionID()) {
@@ -124,10 +125,7 @@ public class GameView extends Div{
 		submitButton.addClickShortcut(Key.ENTER);
 		this.add(submitButton);
 			
-		add(gameRow ,
-				submitButton
-				
-			);
+		add(submitButton, new Label("") ,gameRow);
 		
 		// listen for all 5 letters to be filled in 
 		

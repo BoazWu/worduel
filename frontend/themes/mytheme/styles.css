@@ -1,3 +1,19 @@
 .GameTile {
 	width: 40px;
 }
+
+.GameLabel{
+	border: 3px solid gray;
+	display: block; width: 8VW; height: 8VW;
+	font-size: 4VW ;
+	text-align: center;
+}
+
+.GameView{
+	
+	display: grid;
+	grid-template-columns: 1fr 2fr 1fr;
+	grid-template-rows: 1fr 5fr;
+	
+	
+}

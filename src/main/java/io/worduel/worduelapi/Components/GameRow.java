@@ -26,8 +26,8 @@ public class GameRow extends HorizontalLayout{
 		this.length = length;
 		gameTiles = new Label[length];
 		for(int i = 0; i < length; i++) {
-			Label temp = new Label("a");
-
+			Label temp = new Label("");
+			temp.setClassName("GameLabel");
 			gameTiles[i] = temp;
 			this.add(temp);
 			
@@ -57,8 +57,10 @@ public class GameRow extends HorizontalLayout{
 	public void editRow(String letter) {
 		// backSpace option
 		if(letter.equals("_")) {
-			ui.access(() ->  gameTiles[index].setText(""));
-			index--;
+			if(index != 0) {
+				ui.access(() ->  gameTiles[index].setText(""));
+				index--;
+			}
 		}
 		// if there is space to edit 
 		else if(index < length) {
