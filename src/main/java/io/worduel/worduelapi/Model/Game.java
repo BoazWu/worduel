@@ -59,11 +59,22 @@ public class Game {
 		return "word";
 	}
 	
-	private void checkWord() {
-		//
+	// returns true if the word was in word list, returns false if not
+	public boolean checkWord(String guess) {
+		//checks word list
+		return true;
+	}
+	
+	// returns an array containing which gives a hint for each index
+	public void giveHints() {
+		
 	}
 	
 	public String getPastGuessColoring(String playerID) {
 		return pastGuessColoring.get(playerID);
+	}
+	
+	public int getWordLength() {
+		return wordLength;
 	}
 }
