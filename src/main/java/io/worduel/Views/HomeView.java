@@ -1,4 +1,4 @@
-package io.worduel.worduelapi.Views;
+package io.worduel.Views;
 
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;

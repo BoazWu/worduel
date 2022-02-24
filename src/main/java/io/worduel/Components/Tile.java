@@ -1,4 +1,4 @@
-package io.worduel.worduelapi.Components;
+package io.worduel.Components;
 
 import com.vaadin.flow.component.textfield.TextField;
 

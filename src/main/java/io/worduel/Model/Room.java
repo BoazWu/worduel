@@ -1,12 +1,12 @@
-package io.worduel.worduelapi.Model;
+package io.worduel.Model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 
 import io.worduel.Actions.LobbyAction;
 import io.worduel.Actions.LobbyActionTypes;
-import io.worduel.worduelapi.Networking.GameBroadcaster;
-import io.worduel.worduelapi.Networking.LobbyBroadcaster;
+import io.worduel.Networking.GameBroadcaster;
+import io.worduel.Networking.LobbyBroadcaster;
 
 public class Room {
 	private String roomCode;

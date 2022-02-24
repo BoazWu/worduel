@@ -1,4 +1,4 @@
-package io.worduel.worduelapi.Views;
+package io.worduel.Views;
 
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.Text;
@@ -18,9 +18,9 @@ import com.vaadin.flow.dom.DomListenerRegistration;
 import com.vaadin.flow.shared.Registration;
 
 import io.worduel.Components.NameComponent;
-import io.worduel.worduelapi.Components.GameRow;
-import io.worduel.worduelapi.Model.Game;
-import io.worduel.worduelapi.Model.GameManager;
+import io.worduel.Components.GameRow;
+import io.worduel.Model.Game;
+import io.worduel.Model.GameManager;
 
 @CssImport("./themes/mytheme/styles.css")
 public class GameView extends Div {

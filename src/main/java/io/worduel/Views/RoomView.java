@@ -1,4 +1,4 @@
-package io.worduel.worduelapi.Views;
+package io.worduel.Views;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
@@ -14,7 +14,7 @@ import com.vaadin.flow.shared.Registration;
 
 import io.worduel.Actions.LobbyAction;
 import io.worduel.Actions.LobbyActionTypes;
-import io.worduel.worduelapi.Model.GameManager;
+import io.worduel.Model.GameManager;
 
 @Push
 @Route("/:roomCode")
