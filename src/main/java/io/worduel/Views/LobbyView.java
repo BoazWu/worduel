@@ -1,4 +1,4 @@
-package io.worduel.worduelapi.Views;
+package io.worduel.Views;
 
 import java.util.HashMap;
 
@@ -15,7 +15,7 @@ import com.vaadin.flow.shared.Registration;
 import io.worduel.Actions.LobbyAction;
 import io.worduel.Actions.LobbyActionTypes;
 import io.worduel.Components.NameComponent;
-import io.worduel.worduelapi.Model.GameManager;
+import io.worduel.Model.GameManager;
 
 public class LobbyView extends Div{
 	

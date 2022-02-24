@@ -1,4 +1,4 @@
-package io.worduel.worduelapi.Components;
+package io.worduel.Components;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.UI;

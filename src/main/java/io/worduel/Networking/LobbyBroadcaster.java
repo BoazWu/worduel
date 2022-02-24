@@ -1,4 +1,4 @@
-package io.worduel.worduelapi.Networking;
+package io.worduel.Networking;
 
 import java.util.LinkedList;
 import java.util.concurrent.Executor;
@@ -10,7 +10,7 @@ import com.vaadin.flow.shared.Registration;
 import io.worduel.Actions.Action;
 import io.worduel.Actions.LobbyAction;
 import io.worduel.Actions.LobbyActionTypes;
-import io.worduel.worduelapi.Model.Room;
+import io.worduel.Model.Room;
 
 public class LobbyBroadcaster {
 	private Executor executor = Executors.newSingleThreadExecutor();

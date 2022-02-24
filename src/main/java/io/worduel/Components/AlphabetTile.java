@@ -1,6 +1,6 @@
-package io.worduel.worduelapi.Components;
+package io.worduel.Components;
 
-import io.worduel.worduelapi.*;
+import io.worduel.*;
 
 public class AlphabetTile extends Tile{
 	public AlphabetTile(char letter){

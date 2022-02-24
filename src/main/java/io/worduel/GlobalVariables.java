@@ -1,4 +1,4 @@
-package io.worduel.worduelapi;
+package io.worduel;
 
 public class GlobalVariables {
 	public static int smallTileLength = 40;

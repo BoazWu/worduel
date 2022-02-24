@@ -1,6 +1,6 @@
-package io.worduel.worduelapi.Components;
+package io.worduel.Components;
 
-import io.worduel.worduelapi.GlobalVariables;
+import io.worduel.GlobalVariables;
 
 public class ScoreTile extends Tile{
 	public ScoreTile() {

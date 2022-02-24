@@ -1,4 +1,4 @@
-package io.worduel.worduelapi.Model;
+package io.worduel.Model;
 
 import java.util.HashMap;
 
