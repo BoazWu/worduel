@@ -13,6 +13,7 @@ import com.vaadin.flow.component.notification.Notification;
 import com.vaadin.flow.component.notification.NotificationVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
+import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.dom.DomEventListener;
 import com.vaadin.flow.dom.DomListenerRegistration;
 import com.vaadin.flow.shared.Registration;
@@ -35,20 +36,22 @@ public class GameView extends Div {
 
 	private GameRow currentGameRow;
 	
+	private VerticalLayout gameRowList;
+	
 	private Registration gameBroadcasterRegistration;
 	
 	private DomListenerRegistration domListenerRegistration;
 
 	public GameView(RoomView roomView, String roomCode, String playerID, GameManager gameManager) {
 		
-		
-
 		this.roomView = roomView;
 		this.roomCode = roomCode;
 		this.playerID = playerID;
 		this.gameManager = gameManager;
 		this.setClassName("GameView");
 		gameRound = gameManager.getRoom(roomCode).getGame();
+		
+		gameRowList = new VerticalLayout();
 		
 		this.roomView.getUI().get().access(() -> this.domListenerRegistration = this.roomView.getUI().get().getElement()
 				.addEventListener("keydown", (DomEventListener) event -> {
@@ -84,8 +87,8 @@ public class GameView extends Div {
 					}
 				});
 		
-		GameRow gameRow = new GameRow(gameRound.getWordLength(), roomView.getUI().get());
-		currentGameRow = gameRow;
+		gameRowList.add(new GameRow(gameRound.getWordLength(), roomView.getUI().get()));
+		currentGameRow = (GameRow) gameRowList.getComponentAt(gameRowList.getComponentCount() - 1);
 		
 		//You need to have an "addClickShortcut" method call somewhere in the code otherwise the JSON Event Data cannot process a KeyboardEvent
 		//If you don't have it, the JSON Event Data has a value of null when you press a key
@@ -94,7 +97,7 @@ public class GameView extends Div {
 		Button b = new Button("temp");
 		b.addClickShortcut(Key.ENTER);
 		
-		add(new H1("GameView"), currentGameRow, b);
+		add(new H1("GameView"), gameRowList, b);
 		boolean wordGuessed = false;
 
 	}
@@ -106,8 +109,14 @@ public class GameView extends Div {
 	private void enterKeyPressed() {
 		// check the word, if the row is full and the word is valid, get hints
 		if (currentGameRow.checkFull() && gameRound.checkWord(currentGameRow.getGuess())) {
+			gameRowList.add(new GameRow(gameRound.getWordLength(), roomView.getUI().get()));
+			
+			
 			gameRound.giveHints();
 			System.out.println("Word Submitted: " + currentGameRow.getGuess());
+			currentGameRow = (GameRow) gameRowList.getComponentAt(gameRowList.getComponentCount() - 1);
+			
+			
 		} else {
 			// if word isn't valid, tell the user
 			Notification notification = new Notification();
