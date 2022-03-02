@@ -44,10 +44,15 @@ public class GameManager {
 			onlinePlayerCount--;
 		}
 	}
+	public void deleteRoom(String roomCode) {
+		if (rooms.containsKey(roomCode)) {
+			rooms.remove(roomCode);
+		}
+	}
 
 	public String addRoom() {
 		String roomCode = generateRoomCode();
-		rooms.put(roomCode, new Room(roomCode));
+		rooms.put(roomCode, new Room(roomCode, this));
 		return roomCode;
 	}
 

@@ -21,7 +21,10 @@ public class Room {
     
     private Game game;
     
-    public Room(String roomCode) {
+    private GameManager gameManager;
+    
+    public Room(String roomCode, GameManager gameManager) {
+    	this.gameManager = gameManager;
     	this.roomCode = roomCode;
     	this.playersInRoom = new ArrayList<String>();
     	this.playerReadyStatus = new HashMap<String, Boolean>();
@@ -45,6 +48,9 @@ public class Room {
         	playerReadyCount--;
         }
         playerReadyStatus.remove(playerID);
+        if(playerCount == 0) {
+        	gameManager.removeRoom(roomCode);
+        }
     }
     
     public ArrayList<String> getPlayersInRoom(){
@@ -83,5 +89,8 @@ public class Room {
 	}
 	public Game getGame() {
 		return this.game;
+	}
+	public int getPlayerCount() {
+		return this.playerCount;
 	}
 }
