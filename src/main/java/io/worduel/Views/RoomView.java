@@ -2,6 +2,7 @@ package io.worduel.Views;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
+import com.vaadin.flow.component.ClientCallable;
 import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.page.Push;
@@ -21,31 +22,38 @@ import io.worduel.Model.GameManager;
 public class RoomView extends Div implements BeforeEnterObserver {
 	private String roomCode;
 	private String playerID;
-	
+
 	@Autowired
 	private GameManager gameManager;
-	
+
 	private LobbyView lobbyView;
 	private GameView gameView;
 	private InterimScoresView interimScoresView;
 
 	public RoomView() {
-		
+
 	}
-	
+
 	@Override
 	public void beforeEnter(BeforeEnterEvent event) {
 		roomCode = event.getRouteParameters().get("roomCode").get();
-		if(!gameManager.containsRoom(roomCode)) {
+		if (!gameManager.containsRoom(roomCode)) {
 			event.forwardTo(RoomNotFoundView.class);
-		}else {
+		} else {
+			this.getElement()
+					.executeJs("function closeListener() { $0.$server.windowClosed(); } "
+							+ "window.addEventListener('beforeunload', closeListener); "
+							+ "window.addEventListener('unload', closeListener);", getElement());
+
 			playerID = gameManager.addPlayer();
-			
+
 			lobbyView = new LobbyView(this, roomCode, playerID, gameManager, event);
-			
-			gameManager.getRoom(roomCode).getLobbyBroadcaster().broadcast(new LobbyAction(playerID, LobbyActionTypes.CONNECT));
-			
+
+			gameManager.getRoom(roomCode).getLobbyBroadcaster()
+					.broadcast(new LobbyAction(playerID, LobbyActionTypes.CONNECT));
+
 			add(lobbyView);
+
 		}
 	}
 
@@ -56,12 +64,26 @@ public class RoomView extends Div implements BeforeEnterObserver {
 			add(gameView);
 		});
 	}
+
 	public void roundOver() {
-		//Check if this is the last round, if it is, show finalScoresView
+		// Check if this is the last round, if it is, show finalScoresView
 		interimScoresView = new InterimScoresView(this.roomCode);
 		this.getUI().get().access(() -> {
 			remove(gameView);
 			add(interimScoresView);
 		});
+	}
+
+	@ClientCallable
+	public void windowClosed() {
+		gameManager.removePlayer(playerID);
+
+		if (lobbyView != null) {
+			lobbyView.unregisterFromLobby();
+		}
+		if (gameView != null) {
+			gameView.unregisterFromGame();
+		}
+		System.out.println("Window closed " + playerID);
 	}
 }

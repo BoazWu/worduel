@@ -139,9 +139,11 @@ public class GameView extends Div {
 		}
 	}
 	
-	public void disconnectListeners() {
+	public void unregisterFromGame() {
 		gameBroadcasterRegistration.remove();
+		gameBroadcasterRegistration = null;
 		domListenerRegistration.remove();
+		domListenerRegistration = null;
 	}
 
 }

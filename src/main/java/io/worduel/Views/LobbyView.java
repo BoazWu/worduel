@@ -116,9 +116,9 @@ public class LobbyView extends Div{
     protected void onDetach(DetachEvent detachEvent) {
 		//exit();
     }
-	private void exit() {
+	public void unregisterFromLobby() {
 		lobbyBroadcasterRegistration.remove();
 		lobbyBroadcasterRegistration = null;
-		gameManager.removePlayer(playerID);
+
 	}
 }
