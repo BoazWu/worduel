@@ -1,5 +1,9 @@
 package io.worduel.Model;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -11,6 +15,7 @@ public class Game {
 	private Room room;
 	
 	private int wordLength;
+	private String correctWord;
 	
 	private ArrayList<String> players;
 	
@@ -24,6 +29,11 @@ public class Game {
 		this.room = room;
 		this.wordLength = wordLength;
 		this.players = players;
+		try {
+			this.correctWord = generateWord();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		
 		this.numGuesses = new HashMap<String, Integer>();
 		this.pastGuesses = new HashMap<String, ArrayList<String>>();
@@ -54,15 +64,30 @@ public class Game {
 	}
 	
 	//Generates the hidden word for this game
-	private String generateWord() {
+	private String generateWord() throws IOException {
 		//remember to use wordLength
-		return "word";
+		FileReader f = new FileReader("src/main/java/io/worduel/AllWords.txt");
+		BufferedReader b = new BufferedReader(f);
+		String word = "";
+		int numberOfWords = 1000;
+		for(int i = 0; i < (int)(Math.random() * numberOfWords) + 1; i++) {
+			word = b.readLine();
+		}
+		return word;
 	}
 	
 	// returns true if the word was in word list, returns false if not
-	public boolean checkWord(String guess) {
-		//checks word list
-		return true;
+	public boolean checkWord(String guess) throws IOException {
+		FileReader f = new FileReader("src/main/java/io/worduel/AllWords.txt");
+		BufferedReader b = new BufferedReader(f);
+		String word = b.readLine();
+		while(word != null) {
+			if(word.equals(guess.toLowerCase())) {
+				return true;
+			} 
+			word = b.readLine();
+		}
+		return false;
 	}
 	
 	// returns an array containing which gives a hint for each index

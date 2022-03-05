@@ -1,5 +1,7 @@
 package io.worduel.Views;
 
+import java.io.IOException;
+
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.Text;
 import com.vaadin.flow.component.button.Button;
@@ -57,7 +59,11 @@ public class GameView extends Div {
 				.addEventListener("keydown", (DomEventListener) event -> {
 					String key = event.getEventData().getString("event.key").toUpperCase();
 					if(key.equals("ENTER")) {
-						enterKeyPressed();
+						try {
+							enterKeyPressed();
+						} catch (IOException e) {
+							e.printStackTrace();
+						}
 					}else if(key.equals("BACKSPACE")) {
 						letterKeyPressed("_");
 					}else if(key.length() == 1 && (int)(key.toCharArray()[0]) >= 65 && (int)(key.toCharArray()[0]) <= 90){
@@ -106,7 +112,7 @@ public class GameView extends Div {
 		currentGameRow.editRow(letter);
 	}
 	
-	private void enterKeyPressed() {
+	private void enterKeyPressed() throws IOException {
 		// check the word, if the row is full and the word is valid, get hints
 		if (currentGameRow.checkFull() && gameRound.checkWord(currentGameRow.getGuess())) {
 			gameRowList.add(new GameRow(gameRound.getWordLength(), roomView.getUI().get()));
