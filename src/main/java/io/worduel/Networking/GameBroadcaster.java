@@ -27,7 +27,9 @@ public class GameBroadcaster {
         
         return () -> {
             synchronized (Room.class) {
-            	playerList.remove(player);
+            	if(playerList.contains(player)) {
+            		playerList.remove(player);
+            	}
             }
         };
     }
@@ -36,5 +38,8 @@ public class GameBroadcaster {
         for (Consumer<Action> player : playerList) {
             executor.execute(() -> player.accept(action));
         }
+    }
+    public void reset() {
+    	this.playerList = new LinkedList<>();
     }
 }

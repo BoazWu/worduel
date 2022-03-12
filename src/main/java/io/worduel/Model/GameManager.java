@@ -6,6 +6,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import static java.util.concurrent.TimeUnit.*;
 
 import org.springframework.stereotype.Component;
 
@@ -20,6 +23,8 @@ public class GameManager {
 	private HashMap<String, Player> players;
 	private HashMap<String, Room> rooms;
 
+	private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
+	
 	private int onlinePlayerCount;
 
 	private HashSet<String> allWords;
@@ -128,4 +133,8 @@ public class GameManager {
 		} while (players.containsKey(id));
 		return id;
 	}
+	public void runFunctionWithDelay (Runnable function, int delay) {
+		scheduler.schedule(function, delay, SECONDS);
+	}
+
 }

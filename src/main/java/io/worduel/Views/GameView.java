@@ -58,18 +58,21 @@ public class GameView extends Div {
 		
 		this.roomView.getUI().get().access(() -> this.domListenerRegistration = this.roomView.getUI().get().getElement()
 				.addEventListener("keydown", (DomEventListener) event -> {
+					try {
 					String key = event.getEventData().getString("event.key").toUpperCase();
 					if(key.equals("ENTER")) {
-						try {
 							enterKeyPressed();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
+
 					}else if(key.equals("BACKSPACE")) {
 						letterKeyPressed("_");
 					}else if(key.length() == 1 && (int)(key.toCharArray()[0]) >= 65 && (int)(key.toCharArray()[0]) <= 90){
 						letterKeyPressed(key);
 					}
+					}
+				
+				catch(Exception e) {
+					e.printStackTrace();
+				}
 				}));
 		
 		gameBroadcasterRegistration = gameManager.getRoom(roomCode).getGameBroadcaster().register(this.playerID,
@@ -86,8 +89,11 @@ public class GameView extends Div {
 						}
 						break;
 					case "ROUND_OVER":
-						gameBroadcasterRegistration.remove();
 						roomView.roundOver();
+						break;
+					
+					case "FINAL_ROUND_OVER":
+						roomView.finalRoundOver();
 						break;
 					}
 				});
@@ -108,7 +114,9 @@ public class GameView extends Div {
 	}
 
 	private void letterKeyPressed(String letter) {
-		currentGameRow.editRow(letter);
+		if(currentGameRow != null) {
+			currentGameRow.editRow(letter);
+		}
 	}
 	
 	private void enterKeyPressed() throws IOException {
@@ -119,12 +127,17 @@ public class GameView extends Div {
 			
 			for(int i = 0; i < coloring.length(); i++) {
 				currentGameRow.setTileColor(i, coloring.charAt(i));
+
 			}
-			
-			gameRowList.add(new GameRow(gameRound.getWordLength(), roomView.getUI().get()));
-			
-			System.out.println("Word Submitted: " + currentGameRow.getGuess());
-			currentGameRow = (GameRow) gameRowList.getComponentAt(gameRowList.getComponentCount() - 1);
+			gameRound.makeInput(playerID, coloring);
+			if(coloring.equals(gameRound.getCorrectColoring())) {
+				//Win! Do something here as well, like display a win pop up. or maybe just do nothing and wait for everyone else to finish
+				currentGameRow = null;
+			}else {
+				gameRowList.add(new GameRow(gameRound.getWordLength(), roomView.getUI().get()));
+				
+				currentGameRow = (GameRow) gameRowList.getComponentAt(gameRowList.getComponentCount() - 1);
+			}
 			
 			
 		} else {
@@ -174,12 +187,11 @@ public class GameView extends Div {
 				}
 			}
 		}
-		System.out.println(String.valueOf(coloring));
 		return String.valueOf(coloring);
 	}
 	
 	public void unregisterFromGame() {
-		gameBroadcasterRegistration.remove();
+		gameBroadcasterRegistration.remove();	
 		gameBroadcasterRegistration = null;
 		domListenerRegistration.remove();
 		domListenerRegistration = null;
