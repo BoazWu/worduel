@@ -1,15 +1,20 @@
 package io.worduel.Model;
 
 import java.io.BufferedReader;
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import static java.util.concurrent.TimeUnit.*;
 
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.support.PathMatchingResourcePatternResolver;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -36,7 +41,10 @@ public class GameManager {
 		allWords = new HashSet<String>();
 		targetWords = new String[TARGET_WORDS_THRESHOLD];
 		
-		BufferedReader br = new BufferedReader(new FileReader("src/main/java/io/worduel/AllWords.txt"));
+		
+		InputStream in = getClass().getResourceAsStream("/words.txt");
+		BufferedReader br = new BufferedReader(new InputStreamReader(in));
+		
 		String word;
 		int targetWordsIdx = 0;
 		while((word = br.readLine()) != null) {
@@ -46,6 +54,7 @@ public class GameManager {
 				targetWords[targetWordsIdx++] = word;
 			}
 		}
+		br.close();
 	}
 
 	// returns true if the word was in word list, returns false if not
