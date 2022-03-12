@@ -1,19 +1,41 @@
+:root {
+	--green: #00ff00;
+	--yellow: #d1c434;
+	--gray: #808080;
+}
+
 .GameTile {
 	width: 40px;
 }
 
-.GameLabel{
-	border: 3px solid gray;
-	display: block; width: 8VW; height: 8VW;
-	font-size: 4VW ;
-	text-align: center;
+.YellowTile {
+	background-color: var(--yellow);
+	color: white;
 }
 
-.GameView{
-	
+.GreenTile{
+	background-color: green;
+	color: white;
+}
+
+.GrayTile{
+	background-color: gray;
+	color: white;
+}
+
+.GameLabel {
+	border: 3px solid gray;
+	display: block;
+	width: 8VW;
+	height: 8VW;
+	font-size: 4VW;
+	text-align: center;
+	font-weight: bold;
+
+}
+
+.GameView {
 	display: grid;
 	grid-template-columns: 1fr 2fr 1fr;
 	grid-template-rows: 1fr 5fr;
-	
-	
 }
