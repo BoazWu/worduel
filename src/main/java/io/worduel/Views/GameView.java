@@ -23,6 +23,7 @@ import com.vaadin.flow.shared.Registration;
 
 import io.worduel.Components.NameComponent;
 import io.worduel.Components.GameRow;
+import io.worduel.Components.KeyboardDisplay;
 import io.worduel.Model.Game;
 import io.worduel.Model.GameManager;
 
@@ -55,6 +56,7 @@ public class GameView extends Div {
 		gameRound = gameManager.getRoom(roomCode).getGame();
 		
 		gameRowList = new VerticalLayout();
+		gameRowList.addClassName("GameRowList");
 		
 		this.roomView.getUI().get().access(() -> this.domListenerRegistration = this.roomView.getUI().get().getElement()
 				.addEventListener("keydown", (DomEventListener) event -> {
@@ -106,9 +108,13 @@ public class GameView extends Div {
 		//The event is still triggered, the data is simply null
 		//I am not sure why this happens, I will look into it more later
 		Button b = new Button("");
+		b.addClassName("SubmitButton");
 		b.addClickShortcut(Key.ENTER);
 		
+		H1 title = new H1("Worduel");
+		title.addClassName("Title");
 		add(new H1("Worduel"), gameRowList, b);
+		add(new KeyboardDisplay());
 		boolean wordGuessed = false;
 
 	}
