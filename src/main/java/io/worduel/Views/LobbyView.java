@@ -101,7 +101,6 @@ public class LobbyView extends Div{
 	    });
 	    
 		add(
-			new H1("Lobby View"),
 			new H1("RoomCode: " + roomCode),
 			new H1("Your ID: " + playerID),
 			new HorizontalLayout(

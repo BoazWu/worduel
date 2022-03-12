@@ -67,7 +67,7 @@ public class RoomView extends Div implements BeforeEnterObserver {
 	}
 
 	public void roundOver() {
-		interimScoresView = new InterimScoresView(this.roomCode);
+		interimScoresView = new InterimScoresView(this.roomCode, this.gameManager);
 
 		this.getUI().get().access(() -> {
 			gameView.unregisterFromGame();
@@ -86,7 +86,7 @@ public class RoomView extends Div implements BeforeEnterObserver {
 	}
 
 	public void finalRoundOver() {
-		finalScoresView = new FinalScoresView(this.roomCode);
+		finalScoresView = new FinalScoresView(this.roomCode, this.gameManager);
 		this.getUI().get().access(() -> {
 			gameView.unregisterFromGame();
 			remove(gameView);
