@@ -105,10 +105,10 @@ public class GameView extends Div {
 		//If you don't have it, the JSON Event Data has a value of null when you press a key
 		//The event is still triggered, the data is simply null
 		//I am not sure why this happens, I will look into it more later
-		Button b = new Button("temp");
+		Button b = new Button("");
 		b.addClickShortcut(Key.ENTER);
 		
-		add(new H1("GameView"), gameRowList, b);
+		add(new H1("Worduel"), gameRowList, b);
 		boolean wordGuessed = false;
 
 	}
@@ -120,6 +120,9 @@ public class GameView extends Div {
 	}
 	
 	private void enterKeyPressed() throws IOException {
+		if(this.currentGameRow == null) {
+			return;
+		}
 		// check the word, if the row is full and the word is valid, get hints
 		if (currentGameRow.checkFull() && gameManager.checkWord(currentGameRow.getGuess())) {
 			
