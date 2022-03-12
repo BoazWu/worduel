@@ -29,6 +29,7 @@ public class RoomView extends Div implements BeforeEnterObserver {
 	private LobbyView lobbyView;
 	private GameView gameView;
 	private InterimScoresView interimScoresView;
+	private FinalScoresView finalScoresView;
 
 	public RoomView() {
 
@@ -66,11 +67,30 @@ public class RoomView extends Div implements BeforeEnterObserver {
 	}
 
 	public void roundOver() {
-		// Check if this is the last round, if it is, show finalScoresView
 		interimScoresView = new InterimScoresView(this.roomCode);
+
 		this.getUI().get().access(() -> {
+			gameView.unregisterFromGame();
 			remove(gameView);
 			add(interimScoresView);
+		});
+		
+		gameManager.runFunctionWithDelay(() -> 
+			this.getUI().get().access(() -> {
+				gameView = new GameView(this, roomCode, playerID, gameManager);
+				remove(interimScoresView);
+				add(gameView);
+			})
+		, 5);
+		
+	}
+
+	public void finalRoundOver() {
+		finalScoresView = new FinalScoresView(this.roomCode);
+		this.getUI().get().access(() -> {
+			gameView.unregisterFromGame();
+			remove(gameView);
+			add(finalScoresView);
 		});
 	}
 

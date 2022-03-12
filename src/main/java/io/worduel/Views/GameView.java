@@ -1,6 +1,7 @@
 package io.worduel.Views;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.Text;
@@ -57,18 +58,21 @@ public class GameView extends Div {
 		
 		this.roomView.getUI().get().access(() -> this.domListenerRegistration = this.roomView.getUI().get().getElement()
 				.addEventListener("keydown", (DomEventListener) event -> {
+					try {
 					String key = event.getEventData().getString("event.key").toUpperCase();
 					if(key.equals("ENTER")) {
-						try {
 							enterKeyPressed();
-						} catch (IOException e) {
-							e.printStackTrace();
-						}
+
 					}else if(key.equals("BACKSPACE")) {
 						letterKeyPressed("_");
 					}else if(key.length() == 1 && (int)(key.toCharArray()[0]) >= 65 && (int)(key.toCharArray()[0]) <= 90){
 						letterKeyPressed(key);
 					}
+					}
+				
+				catch(Exception e) {
+					e.printStackTrace();
+				}
 				}));
 		
 		gameBroadcasterRegistration = gameManager.getRoom(roomCode).getGameBroadcaster().register(this.playerID,
@@ -78,17 +82,18 @@ public class GameView extends Div {
 					case "MAKE_INPUT":
 						if (action.getSender() == this.playerID) {
 							// I made the input
-							this.getUI().get().access(() -> add(
-									new H4("I made the input " + gameRound.getPastGuessColoring(this.playerID))));
+							// Do nothing
 						} else {
 							// Someone else made the input
-							this.getUI().get().access(() -> add(new H4(action.getSender() + " made the input "
-									+ gameRound.getPastGuessColoring(action.getSender()))));
+							// Update the right-side sidebar
 						}
 						break;
 					case "ROUND_OVER":
-						gameBroadcasterRegistration.remove();
 						roomView.roundOver();
+						break;
+					
+					case "FINAL_ROUND_OVER":
+						roomView.finalRoundOver();
 						break;
 					}
 				});
@@ -109,18 +114,30 @@ public class GameView extends Div {
 	}
 
 	private void letterKeyPressed(String letter) {
-		currentGameRow.editRow(letter);
+		if(currentGameRow != null) {
+			currentGameRow.editRow(letter);
+		}
 	}
 	
 	private void enterKeyPressed() throws IOException {
 		// check the word, if the row is full and the word is valid, get hints
-		if (currentGameRow.checkFull() && gameRound.checkWord(currentGameRow.getGuess())) {
-			gameRowList.add(new GameRow(gameRound.getWordLength(), roomView.getUI().get()));
+		if (currentGameRow.checkFull() && gameManager.checkWord(currentGameRow.getGuess())) {
 			
+			String coloring = generateColoring(currentGameRow.getGuess(), gameRound.getCorrectWord());
 			
-			gameRound.giveHints();
-			System.out.println("Word Submitted: " + currentGameRow.getGuess());
-			currentGameRow = (GameRow) gameRowList.getComponentAt(gameRowList.getComponentCount() - 1);
+			for(int i = 0; i < coloring.length(); i++) {
+				currentGameRow.setTileColor(i, coloring.charAt(i));
+
+			}
+			gameRound.makeInput(playerID, coloring);
+			if(coloring.equals(gameRound.getCorrectColoring())) {
+				//Win! Do something here as well, like display a win pop up. or maybe just do nothing and wait for everyone else to finish
+				currentGameRow = null;
+			}else {
+				gameRowList.add(new GameRow(gameRound.getWordLength(), roomView.getUI().get()));
+				
+				currentGameRow = (GameRow) gameRowList.getComponentAt(gameRowList.getComponentCount() - 1);
+			}
 			
 			
 		} else {
@@ -145,8 +162,36 @@ public class GameView extends Div {
 		}
 	}
 	
+	//Helper method to generate a guess coloring
+	private String generateColoring(String g, String cw) {
+		int length = g.length();
+		char[] coloring = new char[length];
+		boolean[] usedIndexBitmask = new boolean[length];
+		Arrays.fill(coloring, 'w');
+		char[] guess = g.toCharArray();
+		char[] correctWord = cw.toCharArray();
+		for(int i = 0; i < length; i++) {
+			if(guess[i] == correctWord[i]) {
+				coloring[i] = 'g';
+				usedIndexBitmask[i] = true;
+			}
+		}
+		for(int i = 0; i < length; i++) {
+			if(coloring[i] != 'g') {
+				for(int j = 0; j < length; j++) {
+					if(guess[i] == correctWord[j] && !usedIndexBitmask[j]) {
+						coloring[i] = 'y';
+						usedIndexBitmask[j] = true;
+						break;
+					}
+				}
+			}
+		}
+		return String.valueOf(coloring);
+	}
+	
 	public void unregisterFromGame() {
-		gameBroadcasterRegistration.remove();
+		gameBroadcasterRegistration.remove();	
 		gameBroadcasterRegistration = null;
 		domListenerRegistration.remove();
 		domListenerRegistration = null;
