@@ -91,4 +91,13 @@ public class GameRow extends HorizontalLayout{
 		}
 		
 	}
+	//Sets GameTile at a certain index to a certain color
+	//g = green, y = yellow, w = white
+	public void setTileColor(int tileIndex, char color) {
+		if(color == 'g') {
+			
+		}else if(color == 'y') {
+			
+		}
+	}
 }

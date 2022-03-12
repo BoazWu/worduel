@@ -1,6 +1,7 @@
 package io.worduel.Views;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.Text;
@@ -78,12 +79,10 @@ public class GameView extends Div {
 					case "MAKE_INPUT":
 						if (action.getSender() == this.playerID) {
 							// I made the input
-							this.getUI().get().access(() -> add(
-									new H4("I made the input " + gameRound.getPastGuessColoring(this.playerID))));
+							// Do nothing
 						} else {
 							// Someone else made the input
-							this.getUI().get().access(() -> add(new H4(action.getSender() + " made the input "
-									+ gameRound.getPastGuessColoring(action.getSender()))));
+							// Update the right-side sidebar
 						}
 						break;
 					case "ROUND_OVER":
@@ -114,11 +113,16 @@ public class GameView extends Div {
 	
 	private void enterKeyPressed() throws IOException {
 		// check the word, if the row is full and the word is valid, get hints
-		if (currentGameRow.checkFull() && gameRound.checkWord(currentGameRow.getGuess())) {
+		if (currentGameRow.checkFull() && gameManager.checkWord(currentGameRow.getGuess())) {
+			
+			String coloring = generateColoring(currentGameRow.getGuess(), gameRound.getCorrectWord());
+			
+			for(int i = 0; i < coloring.length(); i++) {
+				currentGameRow.setTileColor(i, coloring.charAt(i));
+			}
+			
 			gameRowList.add(new GameRow(gameRound.getWordLength(), roomView.getUI().get()));
 			
-			
-			gameRound.giveHints();
 			System.out.println("Word Submitted: " + currentGameRow.getGuess());
 			currentGameRow = (GameRow) gameRowList.getComponentAt(gameRowList.getComponentCount() - 1);
 			
@@ -143,6 +147,35 @@ public class GameView extends Div {
 			notification.add(layout);
 			notification.open();			
 		}
+	}
+	
+	//Helper method to generate a guess coloring
+	private String generateColoring(String g, String cw) {
+		int length = g.length();
+		char[] coloring = new char[length];
+		boolean[] usedIndexBitmask = new boolean[length];
+		Arrays.fill(coloring, 'w');
+		char[] guess = g.toCharArray();
+		char[] correctWord = cw.toCharArray();
+		for(int i = 0; i < length; i++) {
+			if(guess[i] == correctWord[i]) {
+				coloring[i] = 'g';
+				usedIndexBitmask[i] = true;
+			}
+		}
+		for(int i = 0; i < length; i++) {
+			if(coloring[i] != 'g') {
+				for(int j = 0; j < length; j++) {
+					if(guess[i] == correctWord[j] && !usedIndexBitmask[j]) {
+						coloring[i] = 'y';
+						usedIndexBitmask[j] = true;
+						break;
+					}
+				}
+			}
+		}
+		System.out.println(String.valueOf(coloring));
+		return String.valueOf(coloring);
 	}
 	
 	public void unregisterFromGame() {

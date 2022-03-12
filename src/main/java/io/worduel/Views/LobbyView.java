@@ -40,7 +40,7 @@ public class LobbyView extends Div{
 		nameComponents = new HashMap<String, NameComponent>();
 		playersInRoom = new VerticalLayout();
 		for(String otherPlayerID : gameManager.getRoom(roomCode).getPlayersInRoom()) {
-			NameComponent nameComponent = new NameComponent(gameManager.getPlayerName(otherPlayerID), gameManager.getRoom(roomCode).getReadyStatus(otherPlayerID));
+			NameComponent nameComponent = new NameComponent(gameManager.getPlayerName(otherPlayerID), gameManager.getPlayer(otherPlayerID).getReadyStatus());
 			event.getUI().access(() -> playersInRoom.add(nameComponent));
 			nameComponents.put(otherPlayerID, nameComponent);
 		}
@@ -88,7 +88,7 @@ public class LobbyView extends Div{
 		
 		Button readyUpButton = new Button("Ready Up"); 
 	    readyUpButton.addClickListener(click -> { 
-	      if(gameManager.getRoom(roomCode).getReadyStatus(playerID)) {
+	      if(gameManager.getPlayer(playerID).getReadyStatus()) {
 	    	  gameManager.getRoom(roomCode).setReadyStatus(playerID, false);
 	    	  readyUpButton.setText("Ready Up");
 	    	  gameManager.getRoom(roomCode).getLobbyBroadcaster().broadcast(new LobbyAction(playerID, LobbyActionTypes.UNREADY));

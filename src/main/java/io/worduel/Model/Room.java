@@ -2,6 +2,7 @@ package io.worduel.Model;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Set;
 
 import io.worduel.Actions.LobbyAction;
 import io.worduel.Actions.LobbyActionTypes;
@@ -13,7 +14,6 @@ public class Room {
 	private ArrayList<String> playersInRoom;
 	private int playerCount;
     
-    private HashMap<String, Boolean> playerReadyStatus;
     private int playerReadyCount;
     
     private LobbyBroadcaster lobbyBroadcaster;
@@ -27,7 +27,6 @@ public class Room {
     	this.gameManager = gameManager;
     	this.roomCode = roomCode;
     	this.playersInRoom = new ArrayList<String>();
-    	this.playerReadyStatus = new HashMap<String, Boolean>();
     	this.playerReadyCount = 0;
     	this.playerCount = 0;
     	
@@ -38,16 +37,14 @@ public class Room {
     public void addPlayer(String playerID) {
     	playerCount++;
         playersInRoom.add(playerID);
-        playerReadyStatus.put(playerID, false);
     }
     
     public void removePlayer(String playerID) {
     	playerCount--;
         playersInRoom.remove(playerID);
-        if(playerReadyStatus.get(playerID)) {
+        if(gameManager.getPlayer(playerID).getReadyStatus() == true) {
         	playerReadyCount--;
         }
-        playerReadyStatus.remove(playerID);
         if(playerCount == 0) {
         	gameManager.removeRoom(roomCode);
         }
@@ -57,26 +54,23 @@ public class Room {
     	return playersInRoom;
     }
 	public void setReadyStatus(String playerID, boolean readyStatus) {
-		if(readyStatus != playerReadyStatus.get(playerID)) {
-			playerReadyStatus.put(playerID, readyStatus);
+		if(readyStatus != gameManager.getPlayer(playerID).getReadyStatus()) {
+			gameManager.getPlayer(playerID).setReadyStatus(readyStatus);
 			if(readyStatus) {
 				playerReadyCount++;
 				if(playerCount >= 2 && playerReadyCount == playerCount) {
 					gameBroadcaster = new GameBroadcaster(this);
-					game = new Game(this, 5, playersInRoom);
+					game = new Game(this, 5);
 					this.lobbyBroadcaster.broadcast(new LobbyAction("", LobbyActionTypes.START_GAME));
 					playerReadyCount = 0;
-					for(boolean b : playerReadyStatus.values()) {
-						b = false;
+					for(String player : playersInRoom) {
+						gameManager.getPlayer(playerID).resetLobbyVariables();
 					}
 				}
 			}else {
 				playerReadyCount--;
 			}
 		}
-	}
-	public boolean getReadyStatus(String playerID) {
-		return playerReadyStatus.get(playerID);
 	}
 	public LobbyBroadcaster getLobbyBroadcaster() {
 		return this.lobbyBroadcaster;
@@ -92,5 +86,9 @@ public class Room {
 	}
 	public int getPlayerCount() {
 		return this.playerCount;
+	}
+	
+	public GameManager getGameManager() {
+		return this.gameManager;
 	}
 }

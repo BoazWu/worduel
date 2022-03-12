@@ -1,6 +1,11 @@
 package io.worduel.Model;
 
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 import java.util.HashMap;
+import java.util.HashSet;
 
 import org.springframework.stereotype.Component;
 
@@ -8,23 +13,55 @@ import org.springframework.stereotype.Component;
 public class GameManager {
 	private final int ROOM_CODE_LENGTH = 5;
 	private final int PLAYER_ID_LENGTH = 5;
+	
+	//The n most common words can be target words
+	private final int TARGET_WORDS_THRESHOLD = 1000;
 
 	private HashMap<String, Player> players;
 	private HashMap<String, Room> rooms;
 
 	private int onlinePlayerCount;
 
-	public GameManager() {
+	private HashSet<String> allWords;
+	private String[] targetWords;
+	
+	public GameManager() throws IOException {
 		players = new HashMap<String, Player>();
 		rooms = new HashMap<String, Room>();
+		allWords = new HashSet<String>();
+		targetWords = new String[TARGET_WORDS_THRESHOLD];
+		
+		BufferedReader br = new BufferedReader(new FileReader("src/main/java/io/worduel/AllWords.txt"));
+		String word;
+		int targetWordsIdx = 0;
+		while((word = br.readLine()) != null) {
+			word = word.toUpperCase();
+			allWords.add(word);
+			if(targetWordsIdx < TARGET_WORDS_THRESHOLD) {
+				targetWords[targetWordsIdx++] = word;
+			}
+		}
 	}
 
+	// returns true if the word was in word list, returns false if not
+	public boolean checkWord(String guess) {
+		return allWords.contains(guess);
+	}
+	
+	//Generates the hidden word for this game
+	public String generateWord() {
+		return targetWords[(int)(Math.random() * TARGET_WORDS_THRESHOLD)];
+	}
+	
 	public int getOnlinePlayerCount() {
 		return onlinePlayerCount;
 	}
 
 	public String getPlayerName(String playerID) {
 		return players.get(playerID).getName();
+	}
+	public Player getPlayer(String playerID) {
+		return players.get(playerID);
 	}
 
 	public void setPlayerName(String playerID, String name) {
