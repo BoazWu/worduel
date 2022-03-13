@@ -33,9 +33,68 @@
 	font-weight: bold;
 
 }
-
 .GameView {
 	display: grid;
+	grid-template-areas: "title gameRowList submit"
+						 "empty keyboard temp"; 
 	grid-template-columns: 1fr 2fr 1fr;
-	grid-template-rows: 1fr 5fr;
+	grid-template-rows: 2fr 1fr;
+}
+
+.KeyboardDisplay{
+	grid-area: keyboard;
+	display: grid;
+	
+}
+
+.KeyBoardButton{
+	width: 4VW;
+	height: 6VW;
+	font-size: 2VW;
+	text-align: center;
+	color: black;
+
+	
+}
+
+.GreenKeyboardButton{
+	width: 4VW;
+	height: 6VW;
+	font-size: 2VW;
+	text-align: center;
+	background-color: green;
+	color: white;
+
+	
+}
+.YellowKeyboardButton{
+	width: 4VW;
+	height: 6VW;
+	font-size: 2VW;
+	text-align: center;
+	background-color: var(--yellow);
+	color: white;
+
+	
+}
+.GrayKeyboardButton{
+	width: 4VW;
+	height: 6VW;
+	font-size: 2VW;
+	text-align: center;
+	background-color: gray;
+	color: white;
+
+	
+}
+.GameRowList{
+	display: gameRowList;
+}
+
+.Title{
+	display: title;
+}
+
+.SubmitButton{
+	display: submit;
 }
