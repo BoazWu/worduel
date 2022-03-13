@@ -46,14 +46,22 @@ public class GameManager {
 		BufferedReader br = new BufferedReader(new InputStreamReader(in));
 		
 		String word;
-		int targetWordsIdx = 0;
+		
+		// populate all words
 		while((word = br.readLine()) != null) {
 			word = word.toUpperCase();
 			allWords.add(word);
-			if(targetWordsIdx < TARGET_WORDS_THRESHOLD) {
-				targetWords[targetWordsIdx++] = word;
-			}
+			
 		}
+		
+		in = getClass().getResourceAsStream("/popularWords.txt");
+		br = new BufferedReader(new InputStreamReader(in));
+		int targetWordsIdx = 0;
+		while(targetWordsIdx < TARGET_WORDS_THRESHOLD && (word = br.readLine()) != null) {
+			word = word.toUpperCase();
+			targetWords[targetWordsIdx++] = word;
+		}
+		
 		br.close();
 	}
 
