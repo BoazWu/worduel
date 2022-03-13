@@ -52,10 +52,41 @@
 	height: 6VW;
 	font-size: 2VW;
 	text-align: center;
-    color: black;
+	color: black;
+
 	
 }
 
+.GreenKeyboardButton{
+	width: 4VW;
+	height: 6VW;
+	font-size: 2VW;
+	text-align: center;
+	background-color: green;
+	color: white;
+
+	
+}
+.YellowKeyboardButton{
+	width: 4VW;
+	height: 6VW;
+	font-size: 2VW;
+	text-align: center;
+	background-color: var(--yellow);
+	color: white;
+
+	
+}
+.GrayKeyboardButton{
+	width: 4VW;
+	height: 6VW;
+	font-size: 2VW;
+	text-align: center;
+	background-color: gray;
+	color: white;
+
+	
+}
 .GameRowList{
 	display: gameRowList;
 }

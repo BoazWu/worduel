@@ -40,6 +40,8 @@ public class GameView extends Div {
 
 	private GameRow currentGameRow;
 	
+	private KeyboardDisplay keyboard;
+	
 	private VerticalLayout gameRowList;
 	
 	private Registration gameBroadcasterRegistration;
@@ -114,7 +116,8 @@ public class GameView extends Div {
 		H1 title = new H1("Worduel");
 		title.addClassName("Title");
 		add(new H1("Worduel"), gameRowList, b);
-		add(new KeyboardDisplay());
+		keyboard = new KeyboardDisplay();
+		add(keyboard);
 		boolean wordGuessed = false;
 
 	}
