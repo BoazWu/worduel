@@ -139,7 +139,7 @@ public class GameView extends Div {
 			
 			for(int i = 0; i < coloring.length(); i++) {
 				currentGameRow.setTileColor(i, coloring.charAt(i));
-
+				keyboard.setKeyColor(currentGameRow.getGuess().charAt(i), coloring.charAt(i));
 			}
 			gameRound.makeInput(playerID, coloring);
 			if(coloring.equals(gameRound.getCorrectColoring())) {
