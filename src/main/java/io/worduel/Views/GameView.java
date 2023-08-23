@@ -19,6 +19,7 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.dom.DomEventListener;
 import com.vaadin.flow.dom.DomListenerRegistration;
+import com.vaadin.flow.router.RouteParameters;
 import com.vaadin.flow.shared.Registration;
 
 import io.worduel.Components.NameComponent;
@@ -117,6 +118,9 @@ public class GameView extends Div {
 		title.addClassName("Title");
 		add(new H1("Worduel"), gameRowList, b);
 		keyboard = new KeyboardDisplay();
+		
+		setUpKeyboard(keyboard);
+		
 		add(keyboard);
 		boolean wordGuessed = false;
 
@@ -124,6 +128,7 @@ public class GameView extends Div {
 
 	private void letterKeyPressed(String letter) {
 		if(currentGameRow != null) {
+			
 			currentGameRow.editRow(letter);
 		}
 	}
@@ -202,11 +207,49 @@ public class GameView extends Div {
 		return String.valueOf(coloring);
 	}
 	
+	// helper method which gives keyboard keys functionality
+	private void setUpKeyboard(KeyboardDisplay keyboard) {
+		char[] topLetters = keyboard.getTopLetters();
+		int i = 0;
+		for(char letter: topLetters) {
+			keyboard.getKeys()[i].addClickListener(click -> { 
+				letterKeyPressed(letter + "");
+			});
+			i++;
+		}
+		char[] middleLetters = keyboard.getMiddleLetters();
+		for(char letter: middleLetters) {
+			keyboard.getKeys()[i].addClickListener(click -> { 
+				letterKeyPressed(letter + "");
+			});
+			i++;
+		}
+		char[] bottomLetters = keyboard.getBottomLetters();
+		for(char letter: bottomLetters) {
+			if(letter == '-') {
+				keyboard.getKeys()[i].addClickListener(click -> { 
+					try {
+						enterKeyPressed();
+					} catch (IOException e) {
+						e.printStackTrace();
+					}
+				});
+			} else {
+				keyboard.getKeys()[i].addClickListener(click -> { 
+					letterKeyPressed(letter + "");
+				});
+			}
+			i++;
+		}
+
+	}
+	
 	public void unregisterFromGame() {
 		gameBroadcasterRegistration.remove();	
 		gameBroadcasterRegistration = null;
 		domListenerRegistration.remove();
 		domListenerRegistration = null;
 	}
-
+	
+	
 }

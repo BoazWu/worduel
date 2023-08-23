@@ -17,32 +17,56 @@ public class KeyboardDisplay extends VerticalLayout {
 	private char[] keyColors;
 	private int[] charToIndex;
 
+	private Button[] keys;
+
 	public KeyboardDisplay() {
 		this.addClassName("KeyboardDisplay");
 		topRow = new HorizontalLayout();
 		middleRow = new HorizontalLayout();
 		bottomRow = new HorizontalLayout();
 
-		topLetters = new char[] { 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p' };
-		middleLetters = new char[] { 'a', 's', 'd', 'f', 'g', 'h', 'j', 'k', 'l' };
-		bottomLetters = new char[] { '-', 'z', 'x', 'c', 'v', 'b', 'n', 'm', '_' };
+		topLetters = new char[] { 'Q', 'W', 'E', 'R', 'T', 'Y', 'U', 'I', 'O', 'P' };
+		middleLetters = new char[] { 'A', 'S', 'D', 'F', 'G', 'H', 'J', 'K', 'L' };
+		bottomLetters = new char[] { '-', 'Z', 'X', 'C', 'V', 'B', 'N', 'M', '_' };
 		charToIndex = new int[] {10, 23, 21, 12, 2, 13, 14, 15, 7, 16, 17, 18, 25, 24, 8, 9, 0, 3, 11, 4, 6, 22, 1, 20, 5, 19};
 		keyColors = new char[26];
-
+		
+		keys = new Button[28];
+		
+		int index = 0;
+		
 		for (char letter : topLetters) {
 			Button temp = new Button(("" + letter).toUpperCase());
 			temp.addClassName("KeyBoardButton");
 			topRow.add(temp);
+			keys[index] = temp;
+			index++;
 		}
 		for (char letter : middleLetters) {
 			Button temp = new Button(("" + letter).toUpperCase());
 			temp.addClassName("KeyBoardButton");
 			middleRow.add(temp);
+			keys[index] = temp;
+			index++;
 		}
 		for (char letter : bottomLetters) {
-			Button temp = new Button(("" + letter).toUpperCase());
-			temp.addClassName("KeyBoardButton");
-			bottomRow.add(temp);
+			if(letter == '-') {
+				Button temp = new Button("ENTER");
+				temp.addClassName("KeyBoardButton");
+				bottomRow.add(temp);
+				keys[index] = temp;
+			} else if (letter == '_') {
+				Button temp = new Button("DELETE");
+				temp.addClassName("KeyBoardButton");
+				bottomRow.add(temp);
+				keys[index] = temp;
+			} else {
+				Button temp = new Button(("" + letter).toUpperCase());
+				temp.addClassName("KeyBoardButton");
+				bottomRow.add(temp);
+				keys[index] = temp;
+			}
+			index++;
 		}
 
 		this.add(topRow, middleRow, bottomRow);
@@ -78,5 +102,20 @@ public class KeyboardDisplay extends VerticalLayout {
 	public char getKeyColor(char key) {
 		return keyColors[key - 'A'];
 	}
-
+	
+	public Button[] getKeys() {
+		return keys;
+	}
+	
+	public char[] getTopLetters() {
+		return topLetters;
+	}
+	
+	public char[] getMiddleLetters() {
+		return middleLetters;
+	}
+	
+	public char[] getBottomLetters() {
+		return bottomLetters;
+	}
 }
