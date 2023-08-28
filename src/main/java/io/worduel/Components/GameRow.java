@@ -97,6 +97,7 @@ public class GameRow extends HorizontalLayout {
 	public void setTileColor(int tileIndex, char color) {
 		if (color == 'g') {
 			gameTiles[tileIndex].setClassName("GameLabel GreenTile");
+
 		} else if (color == 'y') {
 			gameTiles[tileIndex].setClassName("GameLabel YellowTile");
 		} else {
