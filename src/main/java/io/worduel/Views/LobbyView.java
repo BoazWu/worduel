@@ -6,6 +6,7 @@ import com.vaadin.flow.component.DetachEvent;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.component.textfield.TextField;
@@ -31,6 +32,8 @@ public class LobbyView extends Div{
 	private HashMap<String, NameComponent> nameComponents;
 	
 	public LobbyView(RoomView roomView, String roomCode, String playerID, GameManager gameManager, BeforeEnterEvent event) {
+		this.setClassName("LobbyLayout");
+		
 		this.roomView = roomView;
 		
 		this.roomCode = roomCode;
@@ -39,6 +42,7 @@ public class LobbyView extends Div{
 		
 		nameComponents = new HashMap<String, NameComponent>();
 		playersInRoom = new VerticalLayout();
+		playersInRoom.setAlignItems(FlexComponent.Alignment.CENTER);
 		for(String otherPlayerID : gameManager.getRoom(roomCode).getPlayersInRoom()) {
 			NameComponent nameComponent = new NameComponent(gameManager.getPlayerName(otherPlayerID), gameManager.getPlayer(otherPlayerID).getReadyStatus());
 			event.getUI().access(() -> playersInRoom.add(nameComponent));
