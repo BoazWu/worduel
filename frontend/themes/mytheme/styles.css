@@ -140,3 +140,64 @@
   font-size: 3em; /* Example size, adjust as needed */
   /* text-shadow: 1px 1px 2px #cccccc; */ /* Removed shadow */
 }
+
+/* Styles for the new home page layout */
+.home-panel {
+  /* background-color: #f8f9fa; */ /* Light background for panels - REMOVED */
+  /* border: 1px solid var(--worduel-light-gray); - REMOVED */
+  /* border-radius: 8px; */ /* Kept for consistency, can be removed - REMOVED */
+  /* padding: 20px; */ /* Kept for spacing, can be adjusted or removed - REMOVED */
+  min-width: 200px; /* Ensure panels have some width. Adjusted, can be removed if expand works well. */
+  /* box-shadow: 0 2px 4px rgba(0,0,0,0.1); */ /* Subtle shadow for depth - REMOVED */
+  /* The VerticalLayout in Java with setAlignItems(Alignment.CENTER) handles content centering */
+  width: 100%; /* Allow panel to take width given by expand */
+}
+
+.home-button {
+  /* Existing .KeyBoardButton styles are quite specific for keyboard */
+  /* Let's define a more generic button style for home page */
+  background-color: var(--worduel-green);
+  color: var(--worduel-white);
+  font-weight: bold;
+  border-radius: 4px;
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  text-align: center; /* Ensure text is centered */
+  min-width: 150px; /* Give buttons a decent minimum width */
+  display: inline-flex; /* Use flex for better control over inner content */
+  align-items: center; /* Vertically center content (like icon + text) */
+  justify-content: center; /* Horizontally center content */
+}
+
+.home-button:hover {
+  background-color: #538d4e; /* Darker shade of green */
+}
+
+.home-input {
+  width: 100%;
+}
+
+/* Styles for the Lobby player list */
+.player-list-panel {
+  background-color: #f8f9fa; /* Light background */
+  border: 1px solid var(--worduel-light-gray);
+  border-radius: 8px;
+  padding: 15px;
+  margin-top: 20px; /* Space above the list */
+  width: 100%; /* Take full width of its container (which is 300px) */
+  max-width: 400px; /* Max width for larger screens if parent width is larger */
+  box-shadow: 0 2px 4px rgba(0,0,0,0.05); /* Softer shadow */
+}
+
+/* Styles for Lobby top bar */
+.room-info-text {
+  font-size: 1.1em;
+  font-weight: bold;
+  margin-right: 15px; /* Space between room info and exit button */
+}
+
+.exit-room-button {
+  /* background-color: var(--worduel-dark-gray); /* Example */
+  /* color: var(--worduel-white); */
+}
