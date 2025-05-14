@@ -9,6 +9,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.HashSet;
+import java.util.Set;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import static java.util.concurrent.TimeUnit.*;
@@ -75,6 +76,33 @@ public class GameManager {
 		return targetWords[(int)(Math.random() * TARGET_WORDS_THRESHOLD)];
 	}
 	
+	private String generateUniqueDefaultWord() {
+	    String potentialName;
+	    int attempts = 0;
+	    final int MAX_ATTEMPTS = 20; // Max attempts to find a unique name from the word list
+
+	    // Create a set of current player names for quick lookup (case-insensitive)
+	    Set<String> currentNames = new HashSet<>();
+	    for (Player p : players.values()) {
+	        if (p.getName() != null) { // Ensure name is not null before adding
+	            currentNames.add(p.getName().toLowerCase());
+	        }
+	    }
+
+	    do {
+	        potentialName = generateWord(); // Uses existing method picking from targetWords
+	        attempts++;
+	        // Check if the lowercase version of the potential name is already in use
+	    } while (potentialName == null || currentNames.contains(potentialName.toLowerCase()) && attempts < MAX_ATTEMPTS);
+
+	    if (potentialName == null || (currentNames.contains(potentialName.toLowerCase()) && attempts >= MAX_ATTEMPTS) ) {
+	        // Fallback if a unique word isn't found quickly or generateWord returns null
+	        // Generate a more unique fallback, e.g., with a larger random number or part of ID
+	        return ("Player" + (int)(Math.random() * 100000)).toLowerCase(); // Ensure fallback is lowercase
+	    }
+	    return potentialName.toLowerCase(); // Ensure returned word is lowercase
+	}
+	
 	public int getOnlinePlayerCount() {
 		return onlinePlayerCount;
 	}
@@ -92,7 +120,12 @@ public class GameManager {
 
 	public String addPlayer() {
 		String id = generatePlayerID();
-		players.put(id, new Player(id));
+		Player newPlayer = new Player(id); // Player constructor sets name to id initially
+		
+		String defaultName = generateUniqueDefaultWord();
+		newPlayer.setName(defaultName); // Override with a unique word from the library
+
+		players.put(id, newPlayer);
 		onlinePlayerCount++;
 		return id;
 	}
