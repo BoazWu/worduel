@@ -1,5 +1,6 @@
 package io.worduel.Views;
 
+import com.vaadin.flow.component.UI;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -9,13 +10,20 @@ import com.vaadin.flow.router.Route;
 public class RoomNotFoundView extends VerticalLayout{
 	
 	public RoomNotFoundView() {
+		setSizeFull();
+		setAlignItems(Alignment.CENTER);
+		setJustifyContentMode(JustifyContentMode.CENTER);
+
 		Button backButton = new Button("Back to Home"); 
 	    backButton.addClickListener(click -> { 
-	      //Go to home page
+	      getUI().ifPresent(ui -> ui.navigate(TestingView.class));
 	    });
+
+		H1 title = new H1("Room Not Found");
+
 		add(
-				new H1("Room Not Found"),
-				backButton
+			title,
+			backButton
 		);
 	}
 }
