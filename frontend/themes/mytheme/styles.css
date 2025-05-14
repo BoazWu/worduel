@@ -1,38 +1,48 @@
 :root {
-	--green: #00ff00;
-	--yellow: #d1c434;
-	--gray: #808080;
+	--worduel-green: #6baa64; /* Wordle Green */
+	--worduel-yellow: #c9b357; /* Wordle Yellow */
+	--worduel-dark-gray: rgb(120, 124, 126); /* Wordle Dark Gray (used letters) */
+	--worduel-light-gray: #d3d6da; /* Wordle Light Gray (unused keys/borders) */
+	--worduel-white: #ffffff;
+	--worduel-black: #121213;
 }
 
 .GameTile {
 	width: 40px;
 }
 
+.GameLabel { /* Style for the letter tiles in game rows */
+	border: 2px solid var(--worduel-light-gray);
+	display: flex; /* Use flex to center content easily */
+    align-items: center;
+    justify-content: center;
+	width: 8VW; /* Or fixed size like 50px */
+	height: 8VW; /* Or fixed size like 50px */
+	font-size: 3.5VW; /* Adjusted */
+	text-align: center;
+	font-weight: bold;
+    text-transform: uppercase;
+    color: var(--worduel-black); /* Default text color */
+}
+
 .YellowTile {
-	background-color: var(--yellow);
-	color: white;
+	background-color: var(--worduel-yellow);
+	color: var(--worduel-white); /* This should now take precedence for yellow tiles */
+    border-color: var(--worduel-yellow);
 }
 
 .GreenTile{
-	background-color: green;
-	color: white;
+	background-color: var(--worduel-green);
+	color: var(--worduel-white); /* This should now take precedence for green tiles */
+    border-color: var(--worduel-green);
 }
 
 .GrayTile{
-	background-color: gray;
-	color: white;
+	background-color: var(--worduel-dark-gray);
+	color: var(--worduel-white); /* This should now take precedence for gray tiles */
+    border-color: var(--worduel-dark-gray);
 }
 
-.GameLabel {
-	border: 3px solid gray;
-	display: block;
-	width: 8VW;
-	height: 8VW;
-	font-size: 4VW;
-	text-align: center;
-	font-weight: bold;
-
-}
 .GameView {
 	display: grid;
 	grid-template-areas: "title gameRowList submit"
@@ -47,54 +57,86 @@
 	
 }
 
-.KeyBoardButton{
-	width: 4VW;
-	height: 6VW;
-	font-size: 2VW;
+.KeyBoardButton{ /* Base style for keyboard buttons */
+	width: 4VW; /* Consider adjusting or using em/px */
+	height: 6VW; /* Consider adjusting or using em/px */
+	font-size: 1.8VW; /* Adjusted */
 	text-align: center;
-	color: black;
+	background-color: var(--worduel-light-gray);
+	color: var(--worduel-black);
+    border: 1px solid var(--worduel-light-gray);
+    border-radius: 4px; /* Slightly rounded corners */
+    margin: 2px; /* Add some spacing */
+    font-weight: bold;
+}
 
-	
+.KeyBoardButton:hover {
+    background-color: #c0c3c7; /* Slightly darker on hover */
 }
 
 .GreenKeyboardButton{
 	width: 4VW;
 	height: 6VW;
-	font-size: 2VW;
+	font-size: 1.8VW;
 	text-align: center;
-	background-color: green;
-	color: white;
-
-	
+	background-color: var(--worduel-green);
+	color: var(--worduel-white);
+    border-color: var(--worduel-green);
+    border-radius: 4px;
+    margin: 2px;
+    font-weight: bold;
 }
+
 .YellowKeyboardButton{
 	width: 4VW;
 	height: 6VW;
-	font-size: 2VW;
+	font-size: 1.8VW;
 	text-align: center;
-	background-color: var(--yellow);
-	color: white;
-
-	
+	background-color: var(--worduel-yellow);
+	color: var(--worduel-white);
+    border-color: var(--worduel-yellow);
+    border-radius: 4px;
+    margin: 2px;
+    font-weight: bold;
 }
-.GrayKeyboardButton{
+
+.GrayKeyboardButton{ /* Used for letters that are not in the word */
 	width: 4VW;
 	height: 6VW;
-	font-size: 2VW;
+	font-size: 1.8VW;
 	text-align: center;
-	background-color: gray;
-	color: white;
-
-	
+	background-color: var(--worduel-dark-gray);
+	color: var(--worduel-white);
+    border-color: var(--worduel-dark-gray);
+    border-radius: 4px;
+    margin: 2px;
+    font-weight: bold;
 }
+
 .GameRowList{
-	display: gameRowList;
+	grid-area: gameRowList; /* Corrected from display */
+    justify-self: center; /* Center the GameRowList in its grid cell */
+    align-self: center;   /* Center the GameRowList in its grid cell */
 }
 
-.Title{
-	display: title;
-}
+/* .Title{ // Removed as it's no longer used
+	display: title; 
+} */
 
 .SubmitButton{
-	display: submit;
+	grid-area: submit; /* Corrected from display */
+    visibility: hidden; /* Hide the button */
+    width: 0;
+    height: 0;
+    padding: 0;
+    margin: 0;
+    border: none;
+}
+
+.home-title {
+  color: var(--worduel-black); /* Darker, neutral color */
+  font-family: Helvetica, Arial, sans-serif; /* Cleaner font stack */
+  font-weight: bold;
+  font-size: 3em; /* Example size, adjust as needed */
+  /* text-shadow: 1px 1px 2px #cccccc; */ /* Removed shadow */
 }

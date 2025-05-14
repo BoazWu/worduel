@@ -60,6 +60,7 @@ public class GameView extends Div {
 		
 		gameRowList = new VerticalLayout();
 		gameRowList.addClassName("GameRowList");
+		gameRowList.setAlignItems(Alignment.CENTER);
 		
 		this.roomView.getUI().get().access(() -> this.domListenerRegistration = this.roomView.getUI().get().getElement()
 				.addEventListener("keydown", (DomEventListener) event -> {
@@ -114,9 +115,7 @@ public class GameView extends Div {
 		b.addClassName("SubmitButton");
 		b.addClickShortcut(Key.ENTER);
 		
-		H1 title = new H1("Worduel");
-		title.addClassName("Title");
-		add(new H1("Worduel"), gameRowList, b);
+		add(gameRowList, b);
 		keyboard = new KeyboardDisplay();
 		
 		setUpKeyboard(keyboard);

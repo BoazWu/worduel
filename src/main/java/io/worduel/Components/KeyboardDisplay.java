@@ -5,6 +5,8 @@ import java.awt.Component;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.JustifyContentMode;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 
 public class KeyboardDisplay extends VerticalLayout {
 	private HorizontalLayout topRow;
@@ -21,6 +23,8 @@ public class KeyboardDisplay extends VerticalLayout {
 
 	public KeyboardDisplay() {
 		this.addClassName("KeyboardDisplay");
+		this.setAlignItems(Alignment.CENTER);
+
 		topRow = new HorizontalLayout();
 		middleRow = new HorizontalLayout();
 		bottomRow = new HorizontalLayout();
@@ -51,12 +55,12 @@ public class KeyboardDisplay extends VerticalLayout {
 		}
 		for (char letter : bottomLetters) {
 			if(letter == '-') {
-				Button temp = new Button("ENTER");
+				Button temp = new Button("\u23CE");
 				temp.addClassName("KeyBoardButton");
 				bottomRow.add(temp);
 				keys[index] = temp;
 			} else if (letter == '_') {
-				Button temp = new Button("DELETE");
+				Button temp = new Button("\u232B");
 				temp.addClassName("KeyBoardButton");
 				bottomRow.add(temp);
 				keys[index] = temp;
@@ -68,6 +72,11 @@ public class KeyboardDisplay extends VerticalLayout {
 			}
 			index++;
 		}
+
+		// Center the content within each row
+		topRow.setJustifyContentMode(JustifyContentMode.CENTER);
+		middleRow.setJustifyContentMode(JustifyContentMode.CENTER);
+		bottomRow.setJustifyContentMode(JustifyContentMode.CENTER);
 
 		this.add(topRow, middleRow, bottomRow);
 	}

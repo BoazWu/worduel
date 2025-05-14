@@ -8,6 +8,7 @@ import com.vaadin.flow.component.html.Div;
 import com.vaadin.flow.component.html.H1;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
+import com.vaadin.flow.component.orderedlayout.FlexComponent.Alignment;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.router.BeforeEnterEvent;
 import com.vaadin.flow.shared.Registration;
@@ -100,7 +101,11 @@ public class LobbyView extends Div{
 	      }
 	    });
 	    
-		add(
+        VerticalLayout mainLayout = new VerticalLayout();
+        mainLayout.setAlignItems(Alignment.CENTER);
+        mainLayout.setSizeFull(); 
+
+		mainLayout.add(
 			new H1("RoomCode: " + roomCode),
 			new H1("Your ID: " + playerID),
 			new HorizontalLayout(
@@ -110,6 +115,7 @@ public class LobbyView extends Div{
 			readyUpButton,
 			playersInRoom
 		);
+        add(mainLayout);
 	}
 	@Override
     protected void onDetach(DetachEvent detachEvent) {

@@ -21,26 +21,31 @@ public class TestingView extends VerticalLayout{
 	GameManager roomManager;
 	
 	public TestingView() {
-    TextField roomCodeField = new TextField(); 
-    Button makeRoomButton = new Button("Make Room"); 
-    makeRoomButton.addClickListener(click -> { 
-    	String roomCode = roomManager.addRoom();
-    	makeRoomButton.getUI().ifPresent(ui -> ui.navigate(RoomView.class, new RouteParameters("roomCode", roomCode)));
-    });
-    Button joinRoomButton = new Button("Join Room"); 
-    joinRoomButton.addClickListener(click -> { 
-    	joinRoomButton.getUI().ifPresent(ui -> ui.navigate(RoomView.class, new RouteParameters("roomCode", roomCodeField.getValue())));
-    });
+		setAlignItems(Alignment.CENTER);
 
-    add( 
-      new H1("Worduel"),
-      new HorizontalLayout(
-    	makeRoomButton
-      ),
-      new HorizontalLayout(
-    	roomCodeField,        
-    	joinRoomButton
-      )
-    );
+		TextField roomCodeField = new TextField(); 
+		Button makeRoomButton = new Button("Make Room"); 
+		makeRoomButton.addClickListener(click -> { 
+			String roomCode = roomManager.addRoom();
+			makeRoomButton.getUI().ifPresent(ui -> ui.navigate(RoomView.class, new RouteParameters("roomCode", roomCode)));
+		});
+		Button joinRoomButton = new Button("Join Room"); 
+		joinRoomButton.addClickListener(click -> { 
+			joinRoomButton.getUI().ifPresent(ui -> ui.navigate(RoomView.class, new RouteParameters("roomCode", roomCodeField.getValue())));
+		});
+
+		H1 title = new H1("Worduel");
+		title.addClassName("home-title");
+
+		add( 
+			title,
+			new HorizontalLayout(
+				makeRoomButton
+			),
+			new HorizontalLayout(
+				roomCodeField,        
+				joinRoomButton
+			)
+		);
 	}
 }
