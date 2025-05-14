@@ -54,7 +54,16 @@ public class Game {
 			playersDoneList.add(room.getGameManager().getPlayer(playerID));
 			room.getGameManager().getPlayer(playerID).setFinishTime((int)(System.currentTimeMillis() - this.startTime));
 			if(playerDoneAmount == room.getPlayerCount()) {
-				Collections.sort(playersDoneList);
+				Collections.sort(playersDoneList, new Comparator<Player>() {
+					@Override
+					public int compare(Player p1, Player p2) {
+						if (p1.getNumGuesses() != p2.getNumGuesses()) {
+							return Integer.compare(p1.getNumGuesses(), p2.getNumGuesses());
+						}
+						return Integer.compare(p1.getFinishTime(), p2.getFinishTime());
+					}
+				});
+
 				for(int i = 0; i < playersDoneList.size(); i++) {
 					playersDoneList.get(i).addScore(room.getPlayerCount() - i);
 				}
